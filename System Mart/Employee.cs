@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Office.Interop.Excel;
+using System_Mart.Model;
+using System_Mart.Service;
 
 namespace System_Mart
 {
@@ -16,6 +19,8 @@ namespace System_Mart
     {
 
         byte[] imageData =  null;
+
+        private Employee_Service service = new Employee_Service();
         public EmployeeForm()
         {
             InitializeComponent();
@@ -60,81 +65,44 @@ namespace System_Mart
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(txtEmployeeName.Text) || String.IsNullOrEmpty(cbbGender.Text) || String.IsNullOrEmpty(cbbPosition.Text) ||
-    String.IsNullOrEmpty(txtPhoneNumber.Text) || String.IsNullOrEmpty(txtAddress.Text) || String.IsNullOrEmpty(txtSalary.Text) || imageData == null)
+                String.IsNullOrEmpty(txtPhoneNumber.Text) || String.IsNullOrEmpty(txtAddress.Text) || String.IsNullOrEmpty(txtSalary.Text) || imageData == null)
             {
                 MessageBox.Show("Please enter employee name, gender, position, phone number, salary, address, and import an image.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            try
+            // If not exists, insert the new employee
+            if (!decimal.TryParse(txtSalary.Text, out decimal salary))
             {
-
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                string name = txtEmployeeName.Text.Trim();
-                string phoneNumber = txtPhoneNumber.Text.Trim();
-
-                // Check if employee already exists
-                string queryCheck = "SELECT COUNT(*) FROM Employees WHERE eName=@name AND ePhoneNumber=@phone";
-                using (SqlCommand cmdCheck = new SqlCommand(queryCheck, conn))
-                {
-                    cmdCheck.Parameters.AddWithValue("@name", name);
-                    cmdCheck.Parameters.AddWithValue("@phone", phoneNumber);
-
-                    int count = (int)cmdCheck.ExecuteScalar();
-                    if (count > 0)
-                    {
-                        MessageBox.Show("Employee with the same name and phone number already exists!", "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-                }
-
-                // If not exists, insert the new employee
-                if (!decimal.TryParse(txtSalary.Text, out decimal salary))
-                {
-                    MessageBox.Show("Please enter a valid number for salary.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                string gender = cbbGender.Text;
-                string position = cbbPosition.Text;
-                string address = txtAddress.Text.Trim();
-                DateTime dateStartWork = dtpStartWorkDate.Value;
-                string status = "Not yet"; // default status
-
-                string queryInsert = @"INSERT INTO Employees
-                               (eName, eImage, eGender, ePosition, ePhoneNumber, eDateStartWork, eSalary, eAddress, eStatus)
-                               VALUES
-                               (@name, @image, @gender, @position, @phoneNumber, @dateStartWork, @salary, @address, @status)";
-
-                using (SqlCommand cmdInsert = new SqlCommand(queryInsert, conn))
-                {
-                    cmdInsert.Parameters.AddWithValue("@name", name);
-                    cmdInsert.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
-                    cmdInsert.Parameters.AddWithValue("@salary", salary);
-                    cmdInsert.Parameters.AddWithValue("@gender", gender);
-                    cmdInsert.Parameters.AddWithValue("@position", position);
-                    cmdInsert.Parameters.AddWithValue("@phoneNumber", phoneNumber);
-                    cmdInsert.Parameters.AddWithValue("@dateStartWork", dateStartWork);
-                    cmdInsert.Parameters.AddWithValue("@address", address);
-                    cmdInsert.Parameters.AddWithValue("@status", status);
-
-                    cmdInsert.ExecuteNonQuery();
-
-                    pnlMessageEmployee.Show();
-                    lblMessageEmployee.Text = "Added Employee " + name + " successfully.";
-
-                    imageData = null; // reset image after insertion
-                }
+                MessageBox.Show("Please enter a valid number for salary.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            catch (SqlException se)
+
+            string name = txtEmployeeName.Text;
+            string phoneNumber = txtPhoneNumber.Text;
+            string gender = cbbGender.Text;
+            string position = cbbPosition.Text;
+            string address = txtAddress.Text.Trim();
+            DateTime dateStartWork = dtpStartWorkDate.Value;
+
+            Employee_Model emp_model = new Employee_Model()
             {
-                MessageBox.Show("Database error: " + se.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                Name = name,
+                PhoneNumber = phoneNumber,
+                Gender = gender,
+                Position = position,
+                Address = address,
+                Salary = salary,
+                ImageData = imageData,
+                SDW1 = dateStartWork,
+            };
+
+            service.AddEmployee( emp_model );
+
+            pnlMessageEmployee.Show();
+            lblMessageEmployee.Text = "Added Employee " + name + " successfully.";
+
+            imageData = null; // reset image after insertion
 
         }
 
@@ -145,27 +113,7 @@ namespace System_Mart
 
         private void LoadEmployeeView()
         {
-
-            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-            String query = @"SELECT 
-                    eId,
-                    eName,
-                    eImage,
-                    eGender, 
-                    ePosition, 
-                    ePhoneNumber, 
-                    eSalary,
-                    eDateStartWork,
-                    eAddress 
-                FROM Employees";
-
-            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
-            {
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                dgvEmployee.DataSource = dt;
-            }
+            dgvEmployee.DataSource = service.GetAllEmployee();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -247,6 +195,7 @@ namespace System_Mart
 
             try
             {
+               
                 string name = txtEmployeeName.Text.Trim();
                 string gender = cbbGender.Text;
                 string position = cbbPosition.Text;
@@ -266,81 +215,26 @@ namespace System_Mart
                     return;
                 }
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                Employee_Model emp_model = new Employee_Model()
                 {
-                    try
-                    {
-                        // Update Employees table
-                        string query = @"UPDATE Employees SET 
-                                    eName=@name,
-                                    eSalary=@salary,
-                                    eGender=@gender,
-                                    ePosition=@position,
-                                    ePhoneNumber=@phoneNumber,
-                                    eAddress=@address,
-                                    eDateStartWork=@dateStartWork";
+                    Name = name,
+                    Gender = gender,
+                    Position = position,
+                    PhoneNumber = phoneNumber,
+                    Address = address,
+                    Salary = salary,
+                    SDW1 = dateStartWork,
+                    ImageData = imageData,
+                    Id = id,
+                };
 
-                        if (imageData != null)
-                            query += ", eImage=@image";
+                service.editEmaployee(emp_model);
 
-                        query += " WHERE eId=@id";
+                pnlMessageEmployee.Show();
+                lblMessageEmployee.Text = $"Updated Employee ID {id} successfully.";
 
-                        using (SqlCommand cmd = new SqlCommand(query, conn, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@name", name);
-                            cmd.Parameters.AddWithValue("@salary", salary);
-                            cmd.Parameters.AddWithValue("@gender", gender);
-                            cmd.Parameters.AddWithValue("@position", position);
-                            cmd.Parameters.AddWithValue("@phoneNumber", phoneNumber);
-                            cmd.Parameters.AddWithValue("@address", address);
-                            cmd.Parameters.AddWithValue("@dateStartWork", dateStartWork);
-                            cmd.Parameters.AddWithValue("@id", id);
+                imageData = null; // reset image
 
-                            if (imageData != null)
-                                cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
-
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // If employee is Cashier or Manager, update AccountAdmins table
-                        if (position.Equals("Cashier") || position.Equals("Manager") || position.Equals("Stocker"))
-                        {
-                            string queryAdmin = @"UPDATE AccountAdmins
-                                          SET adminName=@name, adminPosition=@position
-                                          WHERE adminID IN (SELECT adminID FROM CashierAdminMapping WHERE eId=@id)";
-                            using (SqlCommand cmdAdmin = new SqlCommand(queryAdmin, conn, transaction))
-                            {
-                                cmdAdmin.Parameters.AddWithValue("@name", name);
-                                cmdAdmin.Parameters.AddWithValue("@position", position);
-                                cmdAdmin.Parameters.AddWithValue("@id", id);
-
-                                object result = cmdAdmin.ExecuteNonQuery();
-                                if (result != null)
-                                {
-                                    MessageBox.Show("Sucessful!");
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Error");
-                                }
-                            }
-                        }
-
-                        transaction.Commit();
-
-                        pnlMessageEmployee.Show();
-                        lblMessageEmployee.Text = $"Updated Employee ID {id} successfully.";
-
-                        imageData = null; // reset image
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
             }
             catch (SqlException se)
             {
@@ -458,7 +352,7 @@ namespace System_Mart
                     cmd.Parameters.AddWithValue("@name", txtEmployeeName.Text);
                     using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
+                        System.Data.DataTable dt = new System.Data.DataTable();
                         int row = sda.Fill(dt);
                         if (row > 0)
                         {

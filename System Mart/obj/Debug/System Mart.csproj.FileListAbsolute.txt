@@ -54,3 +54,22 @@ D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System_Mart.EmployeeForm
 D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System_Mart.Product.resources
 D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System_Mart.Setting.resources
 D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.EmployeeForm.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\bin\Debug\System Mart.exe.config
+D:\Github\GitHub\C#\Project-OOAD\System Mart\bin\Debug\System Mart.exe
+D:\Github\GitHub\C#\Project-OOAD\System Mart\bin\Debug\System Mart.pdb
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System Mart.csproj.AssemblyReference.cache
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System Mart.csproj.ResolveComReference.cache
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.EmployeeForm.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.Account.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.Product.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.Login.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.MainAdmin.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.MainUser.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.Payment.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.Properties.Resources.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.ResetPassword.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System_Mart.Setting.resources
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System Mart.csproj.GenerateResource.cache
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System Mart.csproj.CoreCompileInputs.cache
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System Mart.exe
+D:\Github\GitHub\C#\Project-OOAD\System Mart\obj\Debug\System Mart.pdb

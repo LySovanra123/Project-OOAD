@@ -78,6 +78,7 @@
     <Compile Include="MainUser.Designer.cs">
       <DependentUpon>MainUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Employee_Model.cs" />
     <Compile Include="Payment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +99,7 @@
     <Compile Include="ResetPassword.Designer.cs">
       <DependentUpon>ResetPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Service\Employee_Service.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Setting.cs">
       <SubType>Form</SubType>
@@ -292,5 +294,6 @@
   <ItemGroup>
     <None Include="Resources\logout %283%29.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
