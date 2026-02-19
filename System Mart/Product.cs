@@ -11,8 +11,6 @@ namespace System_Mart
 {
     public partial class Product : Form
     {
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
-
         private byte[] imageData = null;
         public Product()
         {
@@ -69,28 +67,26 @@ namespace System_Mart
                 }
                 DateTime importDate = dtpImportDate.Value;
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
-                {
-                    conn.Open();
-                    String query = "INSERT INTO Products(pName,pImage,pPrice,importDate,pStatus) " +
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "INSERT INTO Products(pName,pImage,pPrice,importDate,pStatus) " +
                         "VALUES(@name,@image,@price,@importDate,@status)";
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
-                        cmd.Parameters.AddWithValue("@price", price);
-                        cmd.Parameters.AddWithValue("@importDate", importDate);
-                        cmd.Parameters.AddWithValue("@status", "Available");
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
+                    cmd.Parameters.AddWithValue("@price", price);
+                    cmd.Parameters.AddWithValue("@importDate", importDate);
+                    cmd.Parameters.AddWithValue("@status", "Available");
 
-                        cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
 
-                        pnlMessage.Show();
-                        lblMessageProduct.Text = "Added Product " + name + " Sucessful.";
+                    pnlMessage.Show();
+                    lblMessageProduct.Text = "Added Product " + name + " Sucessful.";
 
-                        imageData = null;
+                    imageData = null;
 
-                    }
                 }
             }
             catch (SqlException se)
@@ -124,55 +120,52 @@ namespace System_Mart
 
                 if (imageData == null)
                 {
-                    using (SqlConnection conn = new SqlConnection(stringConnection))
-                    {
-                        conn.Open();
-                        String query = "UPDATE Products SET " +
+
+                    SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                    String query = "UPDATE Products SET " +
                                         "pName=@name," +
                                         "pPrice=@price," +
                                         "importDate=@importDate " +
                                         "WHERE barCode=@barCode AND pStatus=@status";
 
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@name", name);
-                            cmd.Parameters.AddWithValue("@price", price);
-                            cmd.Parameters.AddWithValue("@importDate", importDate);
-                            cmd.Parameters.AddWithValue("@barCode", barCode);
-                            cmd.Parameters.AddWithValue("@status", "Available");
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", name);
+                        cmd.Parameters.AddWithValue("@price", price);
+                        cmd.Parameters.AddWithValue("@importDate", importDate);
+                        cmd.Parameters.AddWithValue("@barCode", barCode);
+                        cmd.Parameters.AddWithValue("@status", "Available");
 
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                        }
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
                     }
                 }
                 else
                 {
-                    using (SqlConnection conn = new SqlConnection(stringConnection))
-                    {
-                        conn.Open();
-                        String query = "UPDATE Products SET " +
+                    SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                    String query = "UPDATE Products SET " +
                                         "pName=@name," +
                                         "pImage=@image," +
                                         "pPrice=@price," +
                                         "importDate=@importDate " +
                                         "WHERE barCode=@barCode AND pStatus=@status";
 
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@name", name);
-                            cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
-                            cmd.Parameters.AddWithValue("@price", price);
-                            cmd.Parameters.AddWithValue("@importDate", importDate);
-                            cmd.Parameters.AddWithValue("@barCode", barCode);
-                            cmd.Parameters.AddWithValue("@status", "Available");
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", name);
+                        cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
+                        cmd.Parameters.AddWithValue("@price", price);
+                        cmd.Parameters.AddWithValue("@importDate", importDate);
+                        cmd.Parameters.AddWithValue("@barCode", barCode);
+                        cmd.Parameters.AddWithValue("@status", "Available");
 
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
 
-                        }
-                        imageData = null;
                     }
+                    imageData = null;
                 }
                 pnlMessage.Show();
                 lblMessageProduct.Text = "Updated Product " + barCode + " Sucessful.";
@@ -189,9 +182,9 @@ namespace System_Mart
 
         private void LoadProductView()
         {
-            using (SqlConnection conn = new SqlConnection(stringConnection))
-            {
-                String query = @"SELECT 
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            String query = @"SELECT 
                     barCode, 
                     pName, 
                     pPrice, 
@@ -200,12 +193,11 @@ namespace System_Mart
                     COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
                  FROM Products WHERE pStatus = 'Available'";
 
-                using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    dgvProduct.DataSource = dt;
-                }
+            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
+            {
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                dgvProduct.DataSource = dt;
             }
         }
 
@@ -237,9 +229,9 @@ namespace System_Mart
 
         private void LoadProductSale()
         {
-            using (SqlConnection conn = new SqlConnection(stringConnection))
-            {
-                String query = @"SELECT 
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            String query = @"SELECT 
                     barCode, 
                     pName, 
                     pPrice, 
@@ -248,12 +240,11 @@ namespace System_Mart
                     COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
                  FROM Products WHERE pStatus = 'Saled'";
 
-                using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    dgvProduct.DataSource = dt;
-                }
+            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
+            {
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                dgvProduct.DataSource = dt;
             }
         }
 
@@ -293,41 +284,38 @@ namespace System_Mart
                     return;
                 }
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                // Begin transaction to ensure all deletions happen together
+                using (SqlTransaction transaction = conn.BeginTransaction())
                 {
-                    conn.Open();
-
-                    // Begin transaction to ensure all deletions happen together
-                    using (SqlTransaction transaction = conn.BeginTransaction())
+                    try
                     {
-                        try
+                        // Delete from Products
+                        string queryDeleteProduct = "DELETE FROM Products WHERE barCode=@barCode AND pStatus=@status";
+                        using (SqlCommand cmdProduct = new SqlCommand(queryDeleteProduct, conn, transaction))
                         {
-                            // Delete from Products
-                            string queryDeleteProduct = "DELETE FROM Products WHERE barCode=@barCode AND pStatus=@status";
-                            using (SqlCommand cmdProduct = new SqlCommand(queryDeleteProduct, conn, transaction))
+                            cmdProduct.Parameters.AddWithValue("@barCode", barCode);
+                            cmdProduct.Parameters.AddWithValue("@status", "Available");
+                            int rowsAffected = cmdProduct.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
                             {
-                                cmdProduct.Parameters.AddWithValue("@barCode", barCode);
-                                cmdProduct.Parameters.AddWithValue("@status", "Available");
-                                int rowsAffected = cmdProduct.ExecuteNonQuery();
-
-                                if (rowsAffected > 0)
-                                {
-                                    pnlMessage.Show();
-                                    lblMessageProduct.Text = $"Deleted Product {txtProductName.Text} successfully.";
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Product not found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                }
+                                pnlMessage.Show();
+                                lblMessageProduct.Text = $"Deleted Product {txtProductName.Text} successfully.";
                             }
+                            else
+                            {
+                                MessageBox.Show("Product not found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
 
-                            transaction.Commit();
-                        }
-                        catch
-                        {
-                            transaction.Rollback();
-                            throw; // Rethrow exception to catch block
-                        }
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw; // Rethrow exception to catch block
                     }
                 }
             }
@@ -359,14 +347,13 @@ namespace System_Mart
             }
             try
             {
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                SqlCommand cmd;
+
+                if (int.TryParse(txtSearch.Text, out int searchBarcode))
                 {
-
-                    SqlCommand cmd;
-
-                    if (int.TryParse(txtSearch.Text, out int searchBarcode))
-                    {
-                        String query = @"SELECT 
+                    String query = @"SELECT 
                                             barCode, 
                                             pName, 
                                             pPrice, 
@@ -375,13 +362,13 @@ namespace System_Mart
                                             COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
                                             FROM Products WHERE barCode=@barCode";
 
-                        cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@barCode", searchBarcode);
+                    cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@barCode", searchBarcode);
 
-                    }
-                    else
-                    {
-                        String query = @"SELECT 
+                }
+                else
+                {
+                    String query = @"SELECT 
                                                 barCode, 
                                                 pName, 
                                                 pPrice, 
@@ -390,16 +377,15 @@ namespace System_Mart
                                                 COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
                                                 FROM Products WHERE pName LIKE @name";
 
-                        cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@name", "%" + txtSearch.Text + "%");
-                    }
+                    cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@name", "%" + txtSearch.Text + "%");
+                }
 
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        dgvProduct.DataSource = dt;
-                    }
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    dgvProduct.DataSource = dt;
                 }
 
             }

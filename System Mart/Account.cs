@@ -13,7 +13,6 @@ namespace System_Mart
 {
     public partial class Account : Form
     {
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
         public Account()
         {
             InitializeComponent();
@@ -59,93 +58,90 @@ namespace System_Mart
                     return;
                 }
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                // Check if the account already exists
+                string querySelect = "SELECT COUNT(*) FROM AccountAdmins WHERE adminName=@name";
+                using (SqlCommand cmdCheck = new SqlCommand(querySelect, conn))
                 {
-                    conn.Open();
+                    cmdCheck.Parameters.AddWithValue("@name", name);
+                    int count = (int)cmdCheck.ExecuteScalar();
 
-                    // Check if the account already exists
-                    string querySelect = "SELECT COUNT(*) FROM AccountAdmins WHERE adminName=@name";
-                    using (SqlCommand cmdCheck = new SqlCommand(querySelect, conn))
+                    if (count > 0)
                     {
-                        cmdCheck.Parameters.AddWithValue("@name", name);
-                        int count = (int)cmdCheck.ExecuteScalar();
-
-                        if (count > 0)
-                        {
-                            MessageBox.Show("This account already exists!",
-                                "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
+                        MessageBox.Show("This account already exists!",
+                            "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
+                }
 
-                    // Create a transaction for data consistency
-                    using (SqlTransaction transaction = conn.BeginTransaction())
+                // Create a transaction for data consistency
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
                     {
-                        try
-                        {
-                            // 1️⃣ Insert the new account
-                            string queryInsert = @"INSERT INTO AccountAdmins(adminName, adminPassword, adminPosition, adminStatus)
+                        // 1️⃣ Insert the new account
+                        string queryInsert = @"INSERT INTO AccountAdmins(adminName, adminPassword, adminPosition, adminStatus)
                                            VALUES(@name, @password, @position, @status);
                                            SELECT SCOPE_IDENTITY();";
 
-                            int newAdminId;
-                            using (SqlCommand cmdInsert = new SqlCommand(queryInsert, conn, transaction))
-                            {
-                                cmdInsert.Parameters.AddWithValue("@name", name);
-                                cmdInsert.Parameters.AddWithValue("@password", pass);
-                                cmdInsert.Parameters.AddWithValue("@position", position);
-                                cmdInsert.Parameters.AddWithValue("@status", "enable");
-
-                                // get new adminID
-                                newAdminId = Convert.ToInt32(cmdInsert.ExecuteScalar());
-                            }
-
-                            // 2️⃣ Find corresponding employee ID
-                            string queryEmployee = "SELECT eId FROM Employees WHERE eName=@name";
-                            int employeeId;
-                            using (SqlCommand cmdEmp = new SqlCommand(queryEmployee, conn, transaction))
-                            {
-                                cmdEmp.Parameters.AddWithValue("@name", name);
-                                object result = cmdEmp.ExecuteScalar();
-                                if (result == null)
-                                {
-                                    MessageBox.Show("No employee found with this name. Cannot map account.",
-                                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    transaction.Rollback();
-                                    return;
-                                }
-                                employeeId = Convert.ToInt32(result);
-                            }
-
-                            // 3️⃣ Insert mapping record
-                            string queryMap = "INSERT INTO CashierAdminMapping (eId, adminID) VALUES (@eId, @adminID)";
-                            using (SqlCommand cmdMap = new SqlCommand(queryMap, conn, transaction))
-                            {
-                                cmdMap.Parameters.AddWithValue("@eId", employeeId);
-                                cmdMap.Parameters.AddWithValue("@adminID", newAdminId);
-                                cmdMap.ExecuteNonQuery();
-                            }
-
-                            // 4️⃣ Update employee status
-                            string queryUpdate = "UPDATE Employees SET eStatus=@eStatus WHERE eId=@eId";
-                            using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction))
-                            {
-                                cmdUpdate.Parameters.AddWithValue("@eStatus", "create");
-                                cmdUpdate.Parameters.AddWithValue("@eId", employeeId);
-                                cmdUpdate.ExecuteNonQuery();
-                            }
-
-                            // 5️⃣ Commit all changes
-                            transaction.Commit();
-                            MessageBox.Show("New admin account created and linked successfully!",
-                                "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception exTrans)
+                        int newAdminId;
+                        using (SqlCommand cmdInsert = new SqlCommand(queryInsert, conn, transaction))
                         {
-                            transaction.Rollback();
-                            MessageBox.Show("Failed to create admin: " + exTrans.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            cmdInsert.Parameters.AddWithValue("@name", name);
+                            cmdInsert.Parameters.AddWithValue("@password", pass);
+                            cmdInsert.Parameters.AddWithValue("@position", position);
+                            cmdInsert.Parameters.AddWithValue("@status", "enable");
+
+                            // get new adminID
+                            newAdminId = Convert.ToInt32(cmdInsert.ExecuteScalar());
                         }
+
+                        // 2️⃣ Find corresponding employee ID
+                        string queryEmployee = "SELECT eId FROM Employees WHERE eName=@name";
+                        int employeeId;
+                        using (SqlCommand cmdEmp = new SqlCommand(queryEmployee, conn, transaction))
+                        {
+                            cmdEmp.Parameters.AddWithValue("@name", name);
+                            object result = cmdEmp.ExecuteScalar();
+                            if (result == null)
+                            {
+                                MessageBox.Show("No employee found with this name. Cannot map account.",
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                transaction.Rollback();
+                                return;
+                            }
+                            employeeId = Convert.ToInt32(result);
+                        }
+
+                        // 3️⃣ Insert mapping record
+                        string queryMap = "INSERT INTO CashierAdminMapping (eId, adminID) VALUES (@eId, @adminID)";
+                        using (SqlCommand cmdMap = new SqlCommand(queryMap, conn, transaction))
+                        {
+                            cmdMap.Parameters.AddWithValue("@eId", employeeId);
+                            cmdMap.Parameters.AddWithValue("@adminID", newAdminId);
+                            cmdMap.ExecuteNonQuery();
+                        }
+
+                        // 4️⃣ Update employee status
+                        string queryUpdate = "UPDATE Employees SET eStatus=@eStatus WHERE eId=@eId";
+                        using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction))
+                        {
+                            cmdUpdate.Parameters.AddWithValue("@eStatus", "create");
+                            cmdUpdate.Parameters.AddWithValue("@eId", employeeId);
+                            cmdUpdate.ExecuteNonQuery();
+                        }
+
+                        // 5️⃣ Commit all changes
+                        transaction.Commit();
+                        MessageBox.Show("New admin account created and linked successfully!",
+                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception exTrans)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show("Failed to create admin: " + exTrans.Message,
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 btnRefresh_Click(sender, e);
@@ -163,25 +159,25 @@ namespace System_Mart
 
         private void LoadAccountView()
         {
+
             try
             {
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "SELECT * FROM AccountAdmins";
+
+                using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
                 {
-                    String query = "SELECT * FROM AccountAdmins";
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-                    using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
+                    // Run on UI thread to avoid race condition
+                    this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-
-                        // Run on UI thread to avoid race condition
-                        this.BeginInvoke(new MethodInvoker(() =>
-                        {
-                            dgvAccount.DataSource = dt;
-                            dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                        }));
-                    }
+                        dgvAccount.DataSource = dt;
+                        dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    }));
                 }
             }
             catch (Exception ex)
@@ -211,27 +207,28 @@ namespace System_Mart
             }
             try
             {
-                String name = txtName.Text.Trim();
-                using (SqlConnection conn = new SqlConnection(stringConnection))
-                {
-                    String query = "SELECT * FROM AccountAdmins WHERE adminName=@name";
-                    using(SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
 
-                        SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        if(dt.Rows.Count > 0)
-                        {
-                            dgvAccount.DataSource = dt;
-                        }
-                        else
-                        {
-                            MessageBox.Show("No account found with that name.", "Not Found",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            dgvAccount.DataSource = null;
-                        }
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+               
+                String name = txtName.Text.Trim();
+
+                String query = "SELECT * FROM AccountAdmins WHERE adminName=@name";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+
+                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                    {
+                        dgvAccount.DataSource = dt;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No account found with that name.", "Not Found",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        dgvAccount.DataSource = null;
                     }
                 }
             }
@@ -332,29 +329,28 @@ namespace System_Mart
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "SELECT eId,eName,ePosition FROM Employees WHERE (ePosition=@positionC OR ePosition=@positionM OR ePosition=@positionS) AND eStatus=@status";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    String query = "SELECT eId,eName,ePosition FROM Employees WHERE (ePosition=@positionC OR ePosition=@positionM OR ePosition=@positionS) AND eStatus=@status";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@positionC", "Cashier");
+                    cmd.Parameters.AddWithValue("@positionM", "Manager");
+                    cmd.Parameters.AddWithValue("@positionS", "Stocker");
+                    cmd.Parameters.AddWithValue("@status", "Not yet");
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        cmd.Parameters.AddWithValue("@positionC", "Cashier");
-                        cmd.Parameters.AddWithValue("@positionM", "Manager");
-                        cmd.Parameters.AddWithValue("@positionS", "Stocker");
-                        cmd.Parameters.AddWithValue("@status", "Not yet");
-                        using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            sda.Fill(dt);
-                            dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-                            // Assign DataSource safely on UI thread
-                            this.BeginInvoke(new MethodInvoker(() =>
-                            {
-                                dgvAccount.DataSource = dt;
-                                dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                            }));
-                        }
+                        // Assign DataSource safely on UI thread
+                        this.BeginInvoke(new MethodInvoker(() =>
+                        {
+                            dgvAccount.DataSource = dt;
+                            dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                        }));
                     }
                 }
             }
@@ -378,22 +374,23 @@ namespace System_Mart
                 String position = txtPosition.Text.Trim();
                 String password = txtPassword.Text.Trim();
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+
+                String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", Name);
-                        cmd.Parameters.AddWithValue("@status", "disable");
-                        cmd.Parameters.AddWithValue("@password", password);
-                        cmd.Parameters.AddWithValue("@position", position);
+                    cmd.Parameters.AddWithValue("@name", Name);
+                    cmd.Parameters.AddWithValue("@status", "disable");
+                    cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@position", position);
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
 
-                    }
                 }
+
                 btnRefresh_Click(sender, e);
 
             }
@@ -413,31 +410,29 @@ namespace System_Mart
             {
                 string name = txtName.Text.Trim();
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
-                {
-                    string query = "SELECT adminStatus FROM AccountAdmins WHERE adminName=@name";
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                string query = "SELECT adminStatus FROM AccountAdmins WHERE adminName=@name";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    conn.Open();
+                    Object result = cmd.ExecuteScalar();
+                    if (result != null)
                     {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        conn.Open();
-                        Object result = cmd.ExecuteScalar();
-                        if (result != null)
+                        string status = result.ToString().Trim();
+                        if (status.Equals("enable"))
                         {
-                            string status = result.ToString().Trim();
-                            if (status.Equals("enable"))
-                            {
-                                btnEnable.Enabled = false;
-                                btnDisable.Enabled = true;
-                            }
-                            else
-                            {
-                                btnEnable.Enabled = true;
-                                btnDisable.Enabled = false;
-                            }
+                            btnEnable.Enabled = false;
+                            btnDisable.Enabled = true;
+                        }
+                        else
+                        {
+                            btnEnable.Enabled = true;
+                            btnDisable.Enabled = false;
                         }
                     }
-
                 }
             }
             catch (Exception ex)
@@ -460,21 +455,20 @@ namespace System_Mart
                 String position = txtPosition.Text.Trim();
                 String password = txtPassword.Text.Trim();
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", Name);
-                        cmd.Parameters.AddWithValue("@status", "enable");
-                        cmd.Parameters.AddWithValue("@password", password);
-                        cmd.Parameters.AddWithValue("@position", position);
+                    cmd.Parameters.AddWithValue("@name", Name);
+                    cmd.Parameters.AddWithValue("@status", "enable");
+                    cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@position", position);
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
 
-                    }
                 }
                 btnRefresh_Click(sender, e);
 

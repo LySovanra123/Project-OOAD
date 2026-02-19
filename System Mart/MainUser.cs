@@ -14,8 +14,6 @@ namespace System_Mart
 {
     public partial class MainUser : Form
     {
-
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
         public MainUser()
         {
             InitializeComponent();
@@ -31,21 +29,19 @@ namespace System_Mart
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "SELECT barCode, pName, pPrice FROM Products WHERE pStatus=@status";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    String query = "SELECT barCode, pName, pPrice FROM Products WHERE pStatus=@status";
-                    using(SqlCommand cmd = new SqlCommand(query,conn))
-                    {
-                        cmd.Parameters.AddWithValue("@status", "SaleShortList");
+                    cmd.Parameters.AddWithValue("@status", "SaleShortList");
 
-                        conn.Open();
-                        SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        dgvProductOrder.DataSource = dt;
-                        conn.Close();
+                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    dgvProductOrder.DataSource = dt;
+                    conn.Close();
 
-                    }
                 }
             }
             catch (SqlException se)
@@ -93,22 +89,20 @@ namespace System_Mart
                     return;
                 }
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "UPDATE Products SET pStatus=@status WHERE barCode=@barCode";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    conn.Open();
-                    String query = "UPDATE Products SET pStatus=@status WHERE barCode=@barCode";
+                    cmd.Parameters.AddWithValue("@barCode", barcode);
+                    cmd.Parameters.AddWithValue("@status", "Available");
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@barCode", barcode);
-                        cmd.Parameters.AddWithValue("@status", "Available");
-                        
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
 
-                        LoadProductShortList();
+                    LoadProductShortList();
 
-                    }
                 }
             }
             catch (SqlException se)
@@ -133,64 +127,61 @@ namespace System_Mart
 
                 int barcode = int.Parse(txtInputBarcode.Text);
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                string querySelect = "SELECT barCode, pName, pPrice FROM Products WHERE barCode = @barcode AND pStatus=@status";
+                using (SqlCommand cmdSelect = new SqlCommand(querySelect, conn))
                 {
-                    conn.Open();
-
-                    string querySelect = "SELECT barCode, pName, pPrice FROM Products WHERE barCode = @barcode AND pStatus=@status";
-                    using (SqlCommand cmdSelect = new SqlCommand(querySelect, conn))
+                    cmdSelect.Parameters.AddWithValue("@barcode", barcode);
+                    cmdSelect.Parameters.AddWithValue("@status", "Available");
+                    using (SqlDataReader reader = cmdSelect.ExecuteReader())
                     {
-                        cmdSelect.Parameters.AddWithValue("@barcode", barcode);
-                        cmdSelect.Parameters.AddWithValue("@status", "Available");
-                        using (SqlDataReader reader = cmdSelect.ExecuteReader())
+                        if (reader.Read())
                         {
-                            if (reader.Read())
-                            {
-                                String barCode = reader["barCode"].ToString();
-                                String productName = reader["pName"].ToString();
-                                String price = reader["pPrice"].ToString();
+                            String barCode = reader["barCode"].ToString();
+                            String productName = reader["pName"].ToString();
+                            String price = reader["pPrice"].ToString();
 
-                                lblbarCode.Text = barCode;
-                                lblNameProduct.Text = productName;
-                                lblPrice.Text = price;
-                            }
-                            else
+                            lblbarCode.Text = barCode;
+                            lblNameProduct.Text = productName;
+                            lblPrice.Text = price;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Product not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            lblbarCode.Text = "";
+                            lblPrice.Text = "";
+                            lblNameProduct.Text = "";
+                            return;
+                        }
+                    }
+
+                    string queryUpdate = "UPDATE Products SET pStatus = @status WHERE barCode = @barcode";
+                    using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn))
+                    {
+                        cmdUpdate.Parameters.AddWithValue("@barcode", barcode);
+                        cmdUpdate.Parameters.AddWithValue("@status", "SaleShortList");
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+
+                    string queryImage = "SELECT pImage FROM Products WHERE barCode = @barcode";
+                    using (SqlCommand cmdImage = new SqlCommand(queryImage, conn))
+                    {
+                        cmdImage.Parameters.AddWithValue("@barcode", barcode);
+
+                        object result = cmdImage.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            byte[] imageData = (byte[])result;
+                            using (MemoryStream ms = new MemoryStream(imageData))
                             {
-                                MessageBox.Show("Product not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                lblbarCode.Text = "";
-                                lblPrice.Text = "";
-                                lblNameProduct.Text = "";
-                                return;
+                                picbProduct.Image = Image.FromStream(ms);
                             }
                         }
-
-                        string queryUpdate = "UPDATE Products SET pStatus = @status WHERE barCode = @barcode";
-                        using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn))
+                        else
                         {
-                            cmdUpdate.Parameters.AddWithValue("@barcode", barcode);
-                            cmdUpdate.Parameters.AddWithValue("@status", "SaleShortList");
-                            cmdUpdate.ExecuteNonQuery();
-                        }
-
-                        string queryImage = "SELECT pImage FROM Products WHERE barCode = @barcode";
-                        using (SqlCommand cmdImage = new SqlCommand(queryImage, conn))
-                        {
-                            cmdImage.Parameters.AddWithValue("@barcode", barcode);
-
-                            object result = cmdImage.ExecuteScalar();
-
-                            if (result != null && result != DBNull.Value)
-                            {
-                                byte[] imageData = (byte[])result;
-                                using (MemoryStream ms = new MemoryStream(imageData))
-                                {
-                                    picbProduct.Image = Image.FromStream(ms);
-                                }
-                            }
-                            else
-                            {
-                                picbProduct.Image = null;
-                            }
+                            picbProduct.Image = null;
                         }
                     }
                 }
@@ -224,25 +215,23 @@ namespace System_Mart
             {
                 string employeeName = lblName.Text;
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                string query = "SELECT eId FROM Employees WHERE eName = @name";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    string query = "SELECT eId FROM Employees WHERE eName = @name";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@name", employeeName);
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
                     {
-                        cmd.Parameters.AddWithValue("@name", employeeName);
-                        conn.Open();
-
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
-                        {
-                            Session.SessioneId = Convert.ToInt32(result);
-                        }
-                        else
-                        {
-                            MessageBox.Show($"Employee '{employeeName}' not found in database.");
-                            return;
-                        }
+                        Session.SessioneId = Convert.ToInt32(result);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Employee '{employeeName}' not found in database.");
+                        return;
                     }
                 }
 

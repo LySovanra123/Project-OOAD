@@ -14,7 +14,6 @@ namespace System_Mart
     public partial class Login : Form
     {
 
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
         public Login()
         {
             InitializeComponent();
@@ -29,83 +28,69 @@ namespace System_Mart
         {
             if (String.IsNullOrEmpty(txtName.Text) || String.IsNullOrEmpty(txtPassword.Text))
             {
-                MessageBox.Show("Please enter both username and password.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter both username and password.",
+                                "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             try
             {
-
                 String name = txtName.Text;
                 String password = txtPassword.Text;
 
                 Session.SessionName = name;
                 Session.SessionPassword = password;
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                string Query = "SELECT adminPosition FROM AccountAdmins " +
+                               "WHERE adminName = @name AND adminPassword = @password AND adminStatus=@status";
+
+                using (SqlCommand cmd = new SqlCommand(Query, conn))
                 {
-                    conn.Open();
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@status", "enable");
 
-                    string Query = "SELECT adminPosition FROM AccountAdmins WHERE adminName = @name AND adminPassword = @password AND adminStatus=@status";
+                    Object result = cmd.ExecuteScalar();
 
-                    using (SqlCommand cmd = new SqlCommand(Query, conn))
+                    if (result != null)
                     {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.AddWithValue("@password", password);
-                        cmd.Parameters.AddWithValue("@status", "enable");
+                        String position = result.ToString().Trim();
 
-                        Object result = cmd.ExecuteScalar();
-                        if (result != null)
+                        if (position.Equals("Manager"))
                         {
-                            String position = result.ToString().Trim();
-  
-                            if (position.Equals("Manager"))
-                            {
-                                MainAdmin mainAdmin = Application.OpenForms.OfType<MainAdmin>().FirstOrDefault();
-                                if (mainAdmin == null)
-                                {
-                                    mainAdmin = new MainAdmin();
-                                }
-                                mainAdmin.Show();
-                            }
-                            else if(position.Equals("Stocker"))
-                            {
-                                Product product = Application.OpenForms.OfType<Product>().FirstOrDefault();
-                                if (product == null)
-                                {
-                                    product = new Product();
-                                }
-                                product.StockerShowLogout();
-                                product.Show();
-                            }
-                            else
-                            {
-                                MainUser mainUser = new MainUser();
-                                mainUser.Show();
-                            }
+                            MainAdmin mainAdmin = new MainAdmin();
+                            mainAdmin.Show();
+                        }
+                        else if (position.Equals("Stocker"))
+                        {
+                            Product product = new Product();
+                            product.StockerShowLogout();
+                            product.Show();
                         }
                         else
                         {
-                            MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
+                            MainUser mainUser = new MainUser();
+                            mainUser.Show();
                         }
+
+                        this.Hide();
                     }
-                    conn.Close();
-                    this.Hide();
+                    else
+                    {
+                        MessageBox.Show("Invalid username or password.",
+                                        "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
-            }
-            catch (FormatException fe)
-            {
-                MessageBox.Show("Input format is invalid: " + fe.Message, "Format Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (SqlException se)
             {
-                MessageBox.Show("Database error: " + se.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Database error: " + se.Message,
+                                "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         public void clearForm()
         {

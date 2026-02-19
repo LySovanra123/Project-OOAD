@@ -13,8 +13,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace System_Mart
 {
     public partial class MainAdmin : Form
-    {
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
+    {     
         public MainAdmin()
         {
             InitializeComponent();
@@ -42,36 +41,33 @@ namespace System_Mart
             {
                 chartEmployee.Series.Clear();
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = @"SELECT ePosition , COUNT(*) as EmployeeCount FROM Employees GROUP BY ePosition";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    conn.Open();
+                    SqlDataReader sdr = cmd.ExecuteReader();
 
-                    String query = @"SELECT ePosition , COUNT(*) as EmployeeCount FROM Employees GROUP BY ePosition";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    Series series = new Series("Employees");
+                    series.ChartType = SeriesChartType.Column;
+                    series.Color = Color.FromArgb(52, 152, 219);
+                    series.Font = new Font("Arial", 10);
+
+                    while (sdr.Read())
                     {
-                        SqlDataReader sdr = cmd.ExecuteReader();
-
-                        Series series = new Series("Employees");    
-                        series.ChartType = SeriesChartType.Column;
-                        series.Color = Color.FromArgb(52, 152, 219);
-                        series.Font = new Font("Arial", 10);
-
-                        while (sdr.Read())
-                        {
-                            String dept = sdr["ePosition"].ToString();
-                            int count = Convert.ToInt32(sdr["EmployeeCount"]);
-                            series.Points.AddXY(dept, count);
-                        }
-                        chartEmployee.Series.Add(series);
-
-                        chartEmployee.Legends[0].Docking = Docking.Top;
-                        chartEmployee.ChartAreas[0].AxisY.Interval = 1;
-                        chartEmployee.ChartAreas[0].AxisY.LabelStyle.Format = "0";
-                        chartEmployee.ChartAreas[0].AxisX.Title = "Position";
-                        chartEmployee.ChartAreas[0].AxisY.Title = "Number of Employees";
-
-                        conn.Close();
+                        String dept = sdr["ePosition"].ToString();
+                        int count = Convert.ToInt32(sdr["EmployeeCount"]);
+                        series.Points.AddXY(dept, count);
                     }
+                    chartEmployee.Series.Add(series);
+
+                    chartEmployee.Legends[0].Docking = Docking.Top;
+                    chartEmployee.ChartAreas[0].AxisY.Interval = 1;
+                    chartEmployee.ChartAreas[0].AxisY.LabelStyle.Format = "0";
+                    chartEmployee.ChartAreas[0].AxisX.Title = "Position";
+                    chartEmployee.ChartAreas[0].AxisY.Title = "Number of Employees";
+
+                    conn.Close();
                 }
 
             }
@@ -86,36 +82,33 @@ namespace System_Mart
             {
                 chartProduct.Series.Clear();
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = @"SELECT pStatus , COUNT(*) as ProductCount FROM Products GROUP BY pStatus";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    conn.Open();
+                    SqlDataReader sdr = cmd.ExecuteReader();
 
-                    String query = @"SELECT pStatus , COUNT(*) as ProductCount FROM Products GROUP BY pStatus";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    Series series = new Series("Products");
+                    series.ChartType = SeriesChartType.Column;
+                    series.Color = Color.FromArgb(52, 152, 219);
+                    series.Font = new Font("Arial", 10);
+
+                    while (sdr.Read())
                     {
-                        SqlDataReader sdr = cmd.ExecuteReader();
-
-                        Series series = new Series("Products");
-                        series.ChartType = SeriesChartType.Column;
-                        series.Color = Color.FromArgb(52, 152, 219);
-                        series.Font = new Font("Arial", 10);
-
-                        while (sdr.Read())
-                        {
-                            String dept = sdr["pStatus"].ToString();
-                            int count = Convert.ToInt32(sdr["ProductCount"]);
-                            series.Points.AddXY(dept, count);
-                        }
-                        chartProduct.Series.Add(series);
-
-                        chartProduct.Legends[0].Docking = Docking.Top;
-                        chartProduct.ChartAreas[0].AxisY.Interval = 1;
-                        chartProduct.ChartAreas[0].AxisY.LabelStyle.Format = "0";
-                        chartProduct.ChartAreas[0].AxisX.Title = "Status";
-                        chartProduct.ChartAreas[0].AxisY.Title = "Number of Products";
-
-                        conn.Close();
+                        String dept = sdr["pStatus"].ToString();
+                        int count = Convert.ToInt32(sdr["ProductCount"]);
+                        series.Points.AddXY(dept, count);
                     }
+                    chartProduct.Series.Add(series);
+
+                    chartProduct.Legends[0].Docking = Docking.Top;
+                    chartProduct.ChartAreas[0].AxisY.Interval = 1;
+                    chartProduct.ChartAreas[0].AxisY.LabelStyle.Format = "0";
+                    chartProduct.ChartAreas[0].AxisX.Title = "Status";
+                    chartProduct.ChartAreas[0].AxisY.Title = "Number of Products";
+
+                    conn.Close();
                 }
 
             }

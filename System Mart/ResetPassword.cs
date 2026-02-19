@@ -14,7 +14,6 @@ namespace System_Mart
     public partial class ResetPassword : Form
     {
         private String name;
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
         public ResetPassword(String name)
         {
             InitializeComponent();
@@ -44,22 +43,21 @@ namespace System_Mart
                     return;
                 }
 
-                using(SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "UPDATE AccountAdmins SET adminPassword=@password WHERE adminName=@name";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    String query = "UPDATE AccountAdmins SET adminPassword=@password WHERE adminName=@name";
+                    cmd.Parameters.AddWithValue("@password", pass);
+                    cmd.Parameters.AddWithValue("@name", name);
 
-                    using(SqlCommand cmd = new SqlCommand(query,conn))
-                    {
-                        cmd.Parameters.AddWithValue("@password", pass);
-                        cmd.Parameters.AddWithValue("@name", name);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-
-                        MessageBox.Show("Reset your password sucessful.","Sucess",MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close();
-                    }
+                    MessageBox.Show("Reset your password sucessful.", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
                 }
             }
             catch (SqlException se)

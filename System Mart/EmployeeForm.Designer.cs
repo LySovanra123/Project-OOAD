@@ -28,6 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.btnBack = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnView = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlMessageEmployee = new System.Windows.Forms.Panel();
             this.lblMessageEmployee = new System.Windows.Forms.Label();
@@ -36,12 +41,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnInsert = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtPhoneNumber = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dtpStartWorkDate = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.txtAddress = new System.Windows.Forms.TextBox();
+            this.picbProfile = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
             this.cbbPosition = new System.Windows.Forms.ComboBox();
             this.dgvEmployee = new System.Windows.Forms.DataGridView();
@@ -49,6 +56,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.txtSalary = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.btnClear = new System.Windows.Forms.Button();
             this.lblName = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -56,19 +64,86 @@
             this.label13 = new System.Windows.Forms.Label();
             this.lblId = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.picbProfile = new System.Windows.Forms.PictureBox();
-            this.btnInsert = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnView = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.pnlMessageEmployee.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployee)).BeginInit();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picbProfile)).BeginInit();
             this.SuspendLayout();
+            // 
+            // btnBack
+            // 
+            this.btnBack.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBack.Image = global::System_Mart.Properties.Resources.left_arrow__1_;
+            this.btnBack.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBack.Location = new System.Drawing.Point(393, 1);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(98, 49);
+            this.btnBack.TabIndex = 7;
+            this.btnBack.Text = "Back";
+            this.btnBack.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnBack.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnBack.UseVisualStyleBackColor = false;
+            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.BackColor = System.Drawing.SystemColors.Control;
+            this.btnDelete.Image = global::System_Mart.Properties.Resources.trash__1_;
+            this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDelete.Location = new System.Drawing.Point(286, 1);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(107, 49);
+            this.btnDelete.TabIndex = 6;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // btnView
+            // 
+            this.btnView.BackColor = System.Drawing.SystemColors.Control;
+            this.btnView.Image = global::System_Mart.Properties.Resources.view_user__1_;
+            this.btnView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnView.Location = new System.Drawing.Point(193, 1);
+            this.btnView.Name = "btnView";
+            this.btnView.Size = new System.Drawing.Size(93, 49);
+            this.btnView.TabIndex = 3;
+            this.btnView.Text = "View";
+            this.btnView.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnView.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnView.UseVisualStyleBackColor = false;
+            this.btnView.Click += new System.EventHandler(this.btnView_Click);
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.BackColor = System.Drawing.SystemColors.Control;
+            this.btnUpdate.Image = global::System_Mart.Properties.Resources.update_user__1_;
+            this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnUpdate.Location = new System.Drawing.Point(87, 1);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(106, 49);
+            this.btnUpdate.TabIndex = 2;
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.BackColor = System.Drawing.SystemColors.Control;
+            this.btnAdd.Image = global::System_Mart.Properties.Resources.plus__1_;
+            this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAdd.Location = new System.Drawing.Point(1, 1);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(86, 49);
+            this.btnAdd.TabIndex = 1;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAdd.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // label1
             // 
@@ -148,6 +223,20 @@
             this.label4.TabIndex = 14;
             this.label4.Text = "180 x 180";
             // 
+            // btnInsert
+            // 
+            this.btnInsert.BackColor = System.Drawing.SystemColors.Control;
+            this.btnInsert.Image = global::System_Mart.Properties.Resources.upload__1_;
+            this.btnInsert.Location = new System.Drawing.Point(193, 100);
+            this.btnInsert.Name = "btnInsert";
+            this.btnInsert.Size = new System.Drawing.Size(75, 30);
+            this.btnInsert.TabIndex = 15;
+            this.btnInsert.Text = "Insert";
+            this.btnInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnInsert.UseVisualStyleBackColor = false;
+            this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -198,6 +287,15 @@
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(384, 22);
             this.txtAddress.TabIndex = 25;
+            // 
+            // picbProfile
+            // 
+            this.picbProfile.Location = new System.Drawing.Point(773, 71);
+            this.picbProfile.Name = "picbProfile";
+            this.picbProfile.Size = new System.Drawing.Size(180, 180);
+            this.picbProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picbProfile.TabIndex = 26;
+            this.picbProfile.TabStop = false;
             // 
             // label11
             // 
@@ -272,6 +370,20 @@
             this.label12.TabIndex = 32;
             this.label12.Text = "Salary :";
             // 
+            // btnClear
+            // 
+            this.btnClear.BackColor = System.Drawing.SystemColors.Control;
+            this.btnClear.Image = global::System_Mart.Properties.Resources.clear_format__2_;
+            this.btnClear.Location = new System.Drawing.Point(447, 70);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(88, 30);
+            this.btnClear.TabIndex = 34;
+            this.btnClear.Text = "Clear";
+            this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // lblName
             // 
             this.lblName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -344,119 +456,7 @@
             this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.button1_Click);
             // 
-            // btnClear
-            // 
-            this.btnClear.BackColor = System.Drawing.SystemColors.Control;
-            this.btnClear.Image = global::System_Mart.Properties.Resources.clear_format__2_;
-            this.btnClear.Location = new System.Drawing.Point(447, 70);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(88, 30);
-            this.btnClear.TabIndex = 34;
-            this.btnClear.Text = "Clear";
-            this.btnClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // picbProfile
-            // 
-            this.picbProfile.Location = new System.Drawing.Point(773, 71);
-            this.picbProfile.Name = "picbProfile";
-            this.picbProfile.Size = new System.Drawing.Size(180, 180);
-            this.picbProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picbProfile.TabIndex = 26;
-            this.picbProfile.TabStop = false;
-            // 
-            // btnInsert
-            // 
-            this.btnInsert.BackColor = System.Drawing.SystemColors.Control;
-            this.btnInsert.Image = global::System_Mart.Properties.Resources.upload__1_;
-            this.btnInsert.Location = new System.Drawing.Point(193, 100);
-            this.btnInsert.Name = "btnInsert";
-            this.btnInsert.Size = new System.Drawing.Size(75, 30);
-            this.btnInsert.TabIndex = 15;
-            this.btnInsert.Text = "Insert";
-            this.btnInsert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnInsert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnInsert.UseVisualStyleBackColor = false;
-            this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
-            // 
-            // btnBack
-            // 
-            this.btnBack.BackColor = System.Drawing.SystemColors.Control;
-            this.btnBack.Image = global::System_Mart.Properties.Resources.left_arrow__1_;
-            this.btnBack.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnBack.Location = new System.Drawing.Point(393, 1);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(98, 49);
-            this.btnBack.TabIndex = 7;
-            this.btnBack.Text = "Back";
-            this.btnBack.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnBack.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnBack.UseVisualStyleBackColor = false;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.BackColor = System.Drawing.SystemColors.Control;
-            this.btnDelete.Image = global::System_Mart.Properties.Resources.trash__1_;
-            this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(286, 1);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(107, 49);
-            this.btnDelete.TabIndex = 6;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnDelete.UseVisualStyleBackColor = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // btnView
-            // 
-            this.btnView.BackColor = System.Drawing.SystemColors.Control;
-            this.btnView.Image = global::System_Mart.Properties.Resources.view_user__1_;
-            this.btnView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnView.Location = new System.Drawing.Point(193, 1);
-            this.btnView.Name = "btnView";
-            this.btnView.Size = new System.Drawing.Size(93, 49);
-            this.btnView.TabIndex = 3;
-            this.btnView.Text = "View";
-            this.btnView.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnView.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnView.UseVisualStyleBackColor = false;
-            this.btnView.Click += new System.EventHandler(this.btnView_Click);
-            // 
-            // btnUpdate
-            // 
-            this.btnUpdate.BackColor = System.Drawing.SystemColors.Control;
-            this.btnUpdate.Image = global::System_Mart.Properties.Resources.update_user__1_;
-            this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUpdate.Location = new System.Drawing.Point(87, 1);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(106, 49);
-            this.btnUpdate.TabIndex = 2;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnUpdate.UseVisualStyleBackColor = false;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.BackColor = System.Drawing.SystemColors.Control;
-            this.btnAdd.Image = global::System_Mart.Properties.Resources.plus__1_;
-            this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(1, 1);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(86, 49);
-            this.btnAdd.TabIndex = 1;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnAdd.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnAdd.UseVisualStyleBackColor = false;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // EmployeeForm
+            // Employee
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -495,15 +495,15 @@
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
-            this.Name = "EmployeeForm";
+            this.Name = "Employee";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Employee";
             this.pnlMessageEmployee.ResumeLayout(false);
             this.pnlMessageEmployee.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picbProfile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployee)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picbProfile)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

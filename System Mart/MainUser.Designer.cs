@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainUser));
             this.panel1 = new System.Windows.Forms.Panel();
             this.pnlMessage = new System.Windows.Forms.Panel();
             this.lblMessage = new System.Windows.Forms.Label();
@@ -295,7 +294,6 @@
             this.Controls.Add(this.lblbarCode);
             this.Controls.Add(this.picbProduct);
             this.Controls.Add(this.panel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cashier";

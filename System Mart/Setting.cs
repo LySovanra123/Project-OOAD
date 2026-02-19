@@ -13,7 +13,6 @@ namespace System_Mart
 {
     public partial class Setting : Form
     {
-        String stringConnection = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=MartDB;Integrated Security=True";
         public Setting()
         {
             InitializeComponent();
@@ -45,22 +44,21 @@ namespace System_Mart
                     return;
                 }
 
-                using (SqlConnection conn = new SqlConnection(stringConnection))
+                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+                String query = "UPDATE AccountAdmins SET adminName=@name, adminPassword=@password WHERE adminName=@owerName";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    String query = "UPDATE AccountAdmins SET adminName=@name, adminPassword=@password WHERE adminName=@owerName";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.AddWithValue("@password", password);
-                        cmd.Parameters.AddWithValue("@owerName", Session.SessionName);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@owerName", Session.SessionName);
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
 
-                        MessageBox.Show("Change your information sucessful.","Changed",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Change your information sucessful.", "Changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    }
                 }
             }
             catch (FormatException fe)

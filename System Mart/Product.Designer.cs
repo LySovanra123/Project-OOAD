@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Product));
             this.label1 = new System.Windows.Forms.Label();
             this.pnlMessage = new System.Windows.Forms.Panel();
             this.lblMessageProduct = new System.Windows.Forms.Label();
@@ -441,7 +440,6 @@
             this.Controls.Add(this.btnViewAllPro);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Product";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Product";

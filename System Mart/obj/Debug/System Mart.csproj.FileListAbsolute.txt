@@ -34,7 +34,6 @@ D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System Mart.exe
 D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System Mart.pdb
 D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System Mart.csproj.AssemblyReference.cache
 D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System Mart.csproj.ResolveComReference.cache
-D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.Employee.resources
 D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.Login.resources
 D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.MainAdmin.resources
 D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.MainUser.resources
@@ -54,8 +53,4 @@ D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.Setting.resources
 D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System_Mart.EmployeeForm.resources
 D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System_Mart.Product.resources
 D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System_Mart.Setting.resources
-D:\Code\C#\Project WF\System Mart\System Mart\bin\Debug\BouncyCastle.Cryptography.dll
-D:\Code\C#\Project WF\System Mart\System Mart\bin\Debug\itextsharp.dll
-D:\Code\C#\Project WF\System Mart\System Mart\bin\Debug\BouncyCastle.Cryptography.xml
-D:\Code\C#\Project WF\System Mart\System Mart\bin\Debug\itextsharp.xml
-D:\Code\C#\Project WF\System Mart\System Mart\obj\Debug\System M.C3366968.Up2Date
+D:\Code\C#\Test\System Mart\System Mart\obj\Debug\System_Mart.EmployeeForm.resources
