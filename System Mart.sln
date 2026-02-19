@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System Mart", "System Mart\System Mart.csproj", "{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Mart Setup Application", "Mart Setup Application\Mart Setup Application.vdproj", "{A9EEDDD4-9250-4E94-ABE5-EB11368E3C22}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Default|Any CPU = Default|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}.Default|Any CPU.ActiveCfg = Release|Any CPU
+		{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9EEDDD4-9250-4E94-ABE5-EB11368E3C22}.Debug|Any CPU.ActiveCfg = Debug
+		{A9EEDDD4-9250-4E94-ABE5-EB11368E3C22}.Default|Any CPU.ActiveCfg = Debug
+		{A9EEDDD4-9250-4E94-ABE5-EB11368E3C22}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {60EB2D07-C8FB-4F79-ACE0-DAFD5866BC5B}
+	EndGlobalSection
+EndGlobal
