@@ -79,6 +79,7 @@
       <DependentUpon>MainUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Employee_Model.cs" />
+    <Compile Include="Model\Product_Model.cs" />
     <Compile Include="Payment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +101,7 @@
       <DependentUpon>ResetPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Service\Employee_Service.cs" />
+    <Compile Include="Service\Product_Service.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Setting.cs">
       <SubType>Form</SubType>

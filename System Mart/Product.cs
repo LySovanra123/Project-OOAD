@@ -5,6 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System_Mart.Model;
+using System_Mart.Service;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace System_Mart
@@ -12,6 +14,9 @@ namespace System_Mart
     public partial class Product : Form
     {
         private byte[] imageData = null;
+
+        private Product_Service service = new Product_Service();
+
         public Product()
         {
             InitializeComponent();
@@ -67,27 +72,20 @@ namespace System_Mart
                 }
                 DateTime importDate = dtpImportDate.Value;
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                String query = "INSERT INTO Products(pName,pImage,pPrice,importDate,pStatus) " +
-                        "VALUES(@name,@image,@price,@importDate,@status)";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                Product_Model product_Model = new Product_Model()
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
-                    cmd.Parameters.AddWithValue("@price", price);
-                    cmd.Parameters.AddWithValue("@importDate", importDate);
-                    cmd.Parameters.AddWithValue("@status", "Available");
+                    Pro_name = name,
+                    Pro_price = price,
+                    Pro_imageData = imageData,
+                    Pro_importDate = importDate,
+                };
 
-                    cmd.ExecuteNonQuery();
+                service.addProduct(product_Model);
 
-                    pnlMessage.Show();
-                    lblMessageProduct.Text = "Added Product " + name + " Sucessful.";
+                pnlMessage.Show();
+                lblMessageProduct.Text = "Added Product " + name + " Sucessful.";
 
-                    imageData = null;
-
-                }
+                imageData = null;
             }
             catch (SqlException se)
             {
@@ -118,55 +116,20 @@ namespace System_Mart
                 DateTime importDate = dtpImportDate.Value;
                 int barCode = int.Parse(txtBarCode.Text);
 
-                if (imageData == null)
+                Product_Model product_model = new Product_Model()
                 {
+                    Pro_id = barCode,
+                    Pro_name = name,
+                    Pro_price = price,
+                    Pro_importDate = importDate,
+                    Pro_imageData = imageData,
+                };
 
-                    SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                    String query = "UPDATE Products SET " +
-                                        "pName=@name," +
-                                        "pPrice=@price," +
-                                        "importDate=@importDate " +
-                                        "WHERE barCode=@barCode AND pStatus=@status";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.AddWithValue("@price", price);
-                        cmd.Parameters.AddWithValue("@importDate", importDate);
-                        cmd.Parameters.AddWithValue("@barCode", barCode);
-                        cmd.Parameters.AddWithValue("@status", "Available");
-
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-                    }
-                }
-                else
+                if (!service.UpdateProduct(product_model))
                 {
-                    SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                    String query = "UPDATE Products SET " +
-                                        "pName=@name," +
-                                        "pImage=@image," +
-                                        "pPrice=@price," +
-                                        "importDate=@importDate " +
-                                        "WHERE barCode=@barCode AND pStatus=@status";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.Add("@image", SqlDbType.VarBinary, imageData.Length).Value = imageData;
-                        cmd.Parameters.AddWithValue("@price", price);
-                        cmd.Parameters.AddWithValue("@importDate", importDate);
-                        cmd.Parameters.AddWithValue("@barCode", barCode);
-                        cmd.Parameters.AddWithValue("@status", "Available");
-
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-
-                    }
                     imageData = null;
                 }
+
                 pnlMessage.Show();
                 lblMessageProduct.Text = "Updated Product " + barCode + " Sucessful.";
             }

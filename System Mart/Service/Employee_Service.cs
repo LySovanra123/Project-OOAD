@@ -16,8 +16,6 @@ namespace System_Mart.Service
     {
         public Employee_Service() { }
 
-        private List<Employee_Model> _employees = new List<Employee_Model>();
-
         public void AddEmployee(Employee_Model employee) 
         {
             try
@@ -171,14 +169,91 @@ namespace System_Mart.Service
         }
 
         public bool deleteEmployee(Employee_Model employee) {
-            var d_employee = _employees.FirstOrDefault( e => e.Id == employee.Id );
 
-            if (d_employee != null) {
-                _employees.Remove( d_employee );
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
 
-                return true;
+            // Begin transaction to ensure all deletions happen together
+            SqlTransaction sqlTransaction = conn.BeginTransaction();
+
+            using (SqlTransaction transaction = sqlTransaction)
+            {
+                try
+                {
+                    // Delete from CashierProducts first
+                    string queryDeleteProducts = "DELETE FROM CashierProducts WHERE eId=@id";
+                    using (SqlCommand cmdProducts = new SqlCommand(queryDeleteProducts, conn, transaction))
+                    {
+                        cmdProducts.Parameters.AddWithValue("@id", employee.Id);
+                        cmdProducts.ExecuteNonQuery();
+                    }
+
+                    // Delete from CashierAdminMapping
+                    string queryDeleteMapping = "DELETE FROM CashierAdminMapping WHERE eId=@id";
+                    using (SqlCommand cmdMapping = new SqlCommand(queryDeleteMapping, conn, transaction))
+                    {
+                        cmdMapping.Parameters.AddWithValue("@id", employee.Id);
+                        cmdMapping.ExecuteNonQuery();
+                    }
+
+                    // Finally, delete from Employees
+                    string queryDeleteEmployee = "DELETE FROM Employees WHERE eId=@id";
+                    using (SqlCommand cmdEmployee = new SqlCommand(queryDeleteEmployee, conn, transaction))
+                    {
+                        cmdEmployee.Parameters.AddWithValue("@id", employee.Id);
+                        int rowsAffected = cmdEmployee.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                           return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+
+                    }
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
-            return false;
+        }
+
+        public System.Data.DataTable searchEmployee(string nameSearch)
+        {
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            String query = @"SELECT 
+                        eId,
+                        eName,
+                        eImage,
+                        eGender, 
+                        ePosition, 
+                        ePhoneNumber, 
+                        eSalary,
+                        eDateStartWork,
+                        eAddress 
+                    FROM Employees WHERE eName=@name";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@name", nameSearch);
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                {
+                    System.Data.DataTable dt = new System.Data.DataTable();
+                    int row = sda.Fill(dt);
+                    if (row > 0)
+                    {
+                        return dt;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+
+            }
         }
     }
 }

@@ -264,54 +264,23 @@ namespace System_Mart
                     return;
                 }
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                // Begin transaction to ensure all deletions happen together
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                Employee_Model emp_model = new Employee_Model()
                 {
-                    try
-                    {
-                        // Delete from CashierProducts first
-                        string queryDeleteProducts = "DELETE FROM CashierProducts WHERE eId=@id";
-                        using (SqlCommand cmdProducts = new SqlCommand(queryDeleteProducts, conn, transaction))
-                        {
-                            cmdProducts.Parameters.AddWithValue("@id", id);
-                            cmdProducts.ExecuteNonQuery();
-                        }
+                    Id = id,
+                };
 
-                        // Delete from CashierAdminMapping
-                        string queryDeleteMapping = "DELETE FROM CashierAdminMapping WHERE eId=@id";
-                        using (SqlCommand cmdMapping = new SqlCommand(queryDeleteMapping, conn, transaction))
-                        {
-                            cmdMapping.Parameters.AddWithValue("@id", id);
-                            cmdMapping.ExecuteNonQuery();
-                        }
+                bool haveRowAffected;
 
-                        // Finally, delete from Employees
-                        string queryDeleteEmployee = "DELETE FROM Employees WHERE eId=@id";
-                        using (SqlCommand cmdEmployee = new SqlCommand(queryDeleteEmployee, conn, transaction))
-                        {
-                            cmdEmployee.Parameters.AddWithValue("@id", id);
-                            int rowsAffected = cmdEmployee.ExecuteNonQuery();
+                haveRowAffected = service.deleteEmployee(emp_model);
 
-                            if (rowsAffected > 0)
-                            {
-                                pnlMessageEmployee.Show();
-                                lblMessageEmployee.Text = $"Deleted Employee id: {id} successfully.";
-                            }
-                            else
-                            {
-                                MessageBox.Show("Employee not found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                if (haveRowAffected == true)
+                {
+                    pnlMessageEmployee.Show();
+                    lblMessageEmployee.Text = $"Deleted Employee id: {id} successfully.";
+                }
+                else
+                {
+                    MessageBox.Show("Employee not found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (SqlException se)
@@ -334,40 +303,15 @@ namespace System_Mart
             }
             try
             {
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
 
-                String query = @"SELECT 
-                        eId,
-                        eName,
-                        eImage,
-                        eGender, 
-                        ePosition, 
-                        ePhoneNumber, 
-                        eSalary,
-                        eDateStartWork,
-                        eAddress 
-                    FROM Employees WHERE eName=@name";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                dgvEmployee.DataSource = service.searchEmployee(txtEmployeeName.Text);
+
+                if(dgvEmployee.DataSource == null)
                 {
-                    cmd.Parameters.AddWithValue("@name", txtEmployeeName.Text);
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                    {
-                        System.Data.DataTable dt = new System.Data.DataTable();
-                        int row = sda.Fill(dt);
-                        if (row > 0)
-                        {
-                            dgvEmployee.DataSource = dt;
-                        }
-                        else
-                        {
-                            dgvEmployee.DataSource = null;
-                            pnlMessageEmployee.Show();
-                            lblMessageEmployee.Text = "Emplyee not found!";
-                        }
-                    }
-
+                    pnlMessageEmployee.Show();
+                    lblMessageEmployee.Text = "Emplyee not found!";
                 }
-
+             
             }
             catch (FormatException fe)
             {
