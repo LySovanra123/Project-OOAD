@@ -145,23 +145,7 @@ namespace System_Mart
 
         private void LoadProductView()
         {
-            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-            String query = @"SELECT 
-                    barCode, 
-                    pName, 
-                    pPrice, 
-                    importDate, 
-                    pStatus,
-                    COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
-                 FROM Products WHERE pStatus = 'Available'";
-
-            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
-            {
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                dgvProduct.DataSource = dt;
-            }
+            dgvProduct.DataSource = service.getAllProduct();
         }
 
         private void SelectAllData_Product(object sender, DataGridViewCellEventArgs e)
@@ -192,23 +176,7 @@ namespace System_Mart
 
         private void LoadProductSale()
         {
-            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-            String query = @"SELECT 
-                    barCode, 
-                    pName, 
-                    pPrice, 
-                    importDate, 
-                    pStatus,
-                    COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
-                 FROM Products WHERE pStatus = 'Saled'";
-
-            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
-            {
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                dgvProduct.DataSource = dt;
-            }
+            dgvProduct.DataSource = service.getAllProductSale();
         }
 
         private void btnViewSale_Click(object sender, EventArgs e)
@@ -247,40 +215,18 @@ namespace System_Mart
                     return;
                 }
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+                bool checkDeleteStatus = service.deleteProduct(barCode);
 
-                // Begin transaction to ensure all deletions happen together
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                if (checkDeleteStatus)
                 {
-                    try
-                    {
-                        // Delete from Products
-                        string queryDeleteProduct = "DELETE FROM Products WHERE barCode=@barCode AND pStatus=@status";
-                        using (SqlCommand cmdProduct = new SqlCommand(queryDeleteProduct, conn, transaction))
-                        {
-                            cmdProduct.Parameters.AddWithValue("@barCode", barCode);
-                            cmdProduct.Parameters.AddWithValue("@status", "Available");
-                            int rowsAffected = cmdProduct.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
-                            {
-                                pnlMessage.Show();
-                                lblMessageProduct.Text = $"Deleted Product {txtProductName.Text} successfully.";
-                            }
-                            else
-                            {
-                                MessageBox.Show("Product not found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw; // Rethrow exception to catch block
-                    }
+                    pnlMessage.Show();
+                    lblMessageProduct.Text = $"Deleted Product {txtProductName.Text} successfully.";
                 }
+                else
+                {
+                    MessageBox.Show("Product not found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
             }
             catch (SqlException se)
             {
@@ -310,46 +256,7 @@ namespace System_Mart
             }
             try
             {
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                SqlCommand cmd;
-
-                if (int.TryParse(txtSearch.Text, out int searchBarcode))
-                {
-                    String query = @"SELECT 
-                                            barCode, 
-                                            pName, 
-                                            pPrice, 
-                                            importDate, 
-                                            pStatus,
-                                            COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
-                                            FROM Products WHERE barCode=@barCode";
-
-                    cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@barCode", searchBarcode);
-
-                }
-                else
-                {
-                    String query = @"SELECT 
-                                                barCode, 
-                                                pName, 
-                                                pPrice, 
-                                                importDate, 
-                                                pStatus,
-                                                COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
-                                                FROM Products WHERE pName LIKE @name";
-
-                    cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", "%" + txtSearch.Text + "%");
-                }
-
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    dgvProduct.DataSource = dt;
-                }
+                dgvProduct.DataSource = service.searchProduct(txtSearch.Text);
 
             }
             catch (SqlException se)

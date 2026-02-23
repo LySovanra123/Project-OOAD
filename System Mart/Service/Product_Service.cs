@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 using System_Mart.Model;
 using System.Xml.Linq;
+using System.Windows.Forms;
 
 namespace System_Mart.Service
 {
@@ -85,6 +86,129 @@ namespace System_Mart.Service
 
                 }
                 return false;
+            }
+        }
+
+        public System.Data.DataTable getAllProduct()
+        {
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            String query = @"SELECT 
+                    barCode, 
+                    pName, 
+                    pPrice, 
+                    importDate, 
+                    pStatus,
+                    COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
+                 FROM Products WHERE pStatus = 'Available'";
+
+            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
+            {
+                System.Data.DataTable dt = new System.Data.DataTable();
+                sda.Fill(dt);
+                return dt;
+            }
+        }
+
+        public System.Data.DataTable getAllProductSale()
+        {
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            String query = @"SELECT 
+                    barCode, 
+                    pName, 
+                    pPrice, 
+                    importDate, 
+                    pStatus,
+                    COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
+                 FROM Products WHERE pStatus = 'Saled'";
+
+            using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
+            {
+                System.Data.DataTable dt = new System.Data.DataTable();
+                sda.Fill(dt);
+                return dt;
+            }
+        }
+
+        //================DELETE PRODUCT======================
+        public bool deleteProduct(int barCode)
+        {
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            using (SqlTransaction transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    // Delete from Products
+                    string queryDeleteProduct = "DELETE FROM Products WHERE barCode=@barCode AND pStatus=@status";
+                    using (SqlCommand cmdProduct = new SqlCommand(queryDeleteProduct, conn, transaction))
+                    {
+                        cmdProduct.Parameters.AddWithValue("@barCode", barCode);
+                        cmdProduct.Parameters.AddWithValue("@status", "Available");
+                        int rowsAffected = cmdProduct.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+        //==================================SEARCH PRODUCT=================================
+        public System.Data.DataTable searchProduct(string barcodeORname)
+        {
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            SqlCommand cmd;
+
+            if (int.TryParse(barcodeORname, out int searchBarcode))
+            {
+                String query = @"SELECT 
+                                            barCode, 
+                                            pName, 
+                                            pPrice, 
+                                            importDate, 
+                                            pStatus,
+                                            COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
+                                            FROM Products WHERE barCode=@barCode";
+
+                cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@barCode", searchBarcode);
+
+            }
+            else
+            {
+                String query = @"SELECT 
+                                                barCode, 
+                                                pName, 
+                                                pPrice, 
+                                                importDate, 
+                                                pStatus,
+                                                COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
+                                                FROM Products WHERE pName LIKE @name";
+
+                cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", "%" + barcodeORname + "%");
+            }
+
+            using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+            {
+                System.Data.DataTable dt = new System.Data.DataTable();
+                sda.Fill(dt);
+                return dt;
             }
         }
     }
