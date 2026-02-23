@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="configDB.cs" />
+    <Compile Include="Pattern\configDB_Singleton.cs" />
     <Compile Include="Employee.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +78,7 @@
     <Compile Include="MainUser.Designer.cs">
       <DependentUpon>MainUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Account_Model.cs" />
     <Compile Include="Model\Employee_Model.cs" />
     <Compile Include="Model\Product_Model.cs" />
     <Compile Include="Payment.cs">
@@ -100,6 +101,7 @@
     <Compile Include="ResetPassword.Designer.cs">
       <DependentUpon>ResetPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Pattern\Account_Composite.cs" />
     <Compile Include="Service\Employee_Service.cs" />
     <Compile Include="Service\Product_Service.cs" />
     <Compile Include="Session.cs" />

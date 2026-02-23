@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System_Mart.Model;
 using Microsoft.Office.Interop.Excel;
 using System.Net;
+using System.Xml.Linq;
 
 namespace System_Mart.Service
 {
@@ -253,6 +254,98 @@ namespace System_Mart.Service
                     }
                 }
 
+            }
+        }
+
+
+        //=========================Save new Admin OR Cashier=======================
+        public void saveAccount(Account_Model model)
+        {
+            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+
+            // Check if the account already exists
+            string querySelect = "SELECT COUNT(*) FROM AccountAdmins WHERE adminName=@name";
+            using (SqlCommand cmdCheck = new SqlCommand(querySelect, conn))
+            {
+                cmdCheck.Parameters.AddWithValue("@name", model.Name);
+                int count = (int)cmdCheck.ExecuteScalar();
+
+                if (count > 0)
+                {
+                    MessageBox.Show("This account already exists!",
+                        "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
+            // Create a transaction for data consistency
+            using (SqlTransaction transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    //Insert the new account
+                    string queryInsert = @"INSERT INTO AccountAdmins(adminName, adminPassword, adminPosition, adminStatus)
+                                           VALUES(@name, @password, @position, @status);
+                                           SELECT SCOPE_IDENTITY();";
+
+                    int newAdminId;
+                    using (SqlCommand cmdInsert = new SqlCommand(queryInsert, conn, transaction))
+                    {
+                        cmdInsert.Parameters.AddWithValue("@name", model.Name);
+                        cmdInsert.Parameters.AddWithValue("@password", model.Password);
+                        cmdInsert.Parameters.AddWithValue("@position", model.Position);
+                        cmdInsert.Parameters.AddWithValue("@status", "enable");
+
+                        // get new adminID
+                        newAdminId = Convert.ToInt32(cmdInsert.ExecuteScalar());
+                    }
+
+                    //Find corresponding employee ID
+                    string queryEmployee = "SELECT eId FROM Employees WHERE eName=@name";
+                    int employeeId;
+                    using (SqlCommand cmdEmp = new SqlCommand(queryEmployee, conn, transaction))
+                    {
+                        cmdEmp.Parameters.AddWithValue("@name", model.Name);
+                        object result = cmdEmp.ExecuteScalar();
+                        if (result == null)
+                        {
+                            MessageBox.Show("No employee found with this name. Cannot map account.",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            transaction.Rollback();
+                            return;
+                        }
+                        employeeId = Convert.ToInt32(result);
+                    }
+
+                    //Insert mapping record
+                    string queryMap = "INSERT INTO CashierAdminMapping (eId, adminID) VALUES (@eId, @adminID)";
+                    using (SqlCommand cmdMap = new SqlCommand(queryMap, conn, transaction))
+                    {
+                        cmdMap.Parameters.AddWithValue("@eId", employeeId);
+                        cmdMap.Parameters.AddWithValue("@adminID", newAdminId);
+                        cmdMap.ExecuteNonQuery();
+                    }
+
+                    //Update employee status
+                    string queryUpdate = "UPDATE Employees SET eStatus=@eStatus WHERE eId=@eId";
+                    using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction))
+                    {
+                        cmdUpdate.Parameters.AddWithValue("@eStatus", "create");
+                        cmdUpdate.Parameters.AddWithValue("@eId", employeeId);
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+
+                    //Commit all changes
+                    transaction.Commit();
+                    MessageBox.Show("New admin account created and linked successfully!",
+                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception exTrans)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show("Failed to create admin: " + exTrans.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

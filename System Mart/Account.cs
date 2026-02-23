@@ -8,11 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System_Mart.Model;
+using System_Mart.Service;
 
 namespace System_Mart
 {
     public partial class Account : Form
     {
+
+        private Manager manager;
         public Account()
         {
             InitializeComponent();
@@ -25,6 +29,14 @@ namespace System_Mart
         private void MainAccount_Load(object sender, EventArgs e)
         {
             LoadAccountView();
+            Account_Model admin = new Account_Model()
+            {
+                Name = Session.SessionName,
+                Password = Session.SessionPassword,
+                Position = "Manager",
+                Status = "Enable"
+            };
+            manager = new Manager(admin);
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -58,92 +70,23 @@ namespace System_Mart
                     return;
                 }
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                // Check if the account already exists
-                string querySelect = "SELECT COUNT(*) FROM AccountAdmins WHERE adminName=@name";
-                using (SqlCommand cmdCheck = new SqlCommand(querySelect, conn))
+                Account_Model account = new Account_Model()
                 {
-                    cmdCheck.Parameters.AddWithValue("@name", name);
-                    int count = (int)cmdCheck.ExecuteScalar();
+                    Name = name,
+                    Password = pass,
+                    Position = position
+                };
 
-                    if (count > 0)
-                    {
-                        MessageBox.Show("This account already exists!",
-                            "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-                }
+                IEmployee employee;
+                if(account.Position.ToLower() == "manager")                
+                    employee = new Manager(account);
+                else
+                    employee = new Cashier(account);
 
-                // Create a transaction for data consistency
-                using (SqlTransaction transaction = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        // 1️⃣ Insert the new account
-                        string queryInsert = @"INSERT INTO AccountAdmins(adminName, adminPassword, adminPosition, adminStatus)
-                                           VALUES(@name, @password, @position, @status);
-                                           SELECT SCOPE_IDENTITY();";
+                manager.Add(employee);
 
-                        int newAdminId;
-                        using (SqlCommand cmdInsert = new SqlCommand(queryInsert, conn, transaction))
-                        {
-                            cmdInsert.Parameters.AddWithValue("@name", name);
-                            cmdInsert.Parameters.AddWithValue("@password", pass);
-                            cmdInsert.Parameters.AddWithValue("@position", position);
-                            cmdInsert.Parameters.AddWithValue("@status", "enable");
-
-                            // get new adminID
-                            newAdminId = Convert.ToInt32(cmdInsert.ExecuteScalar());
-                        }
-
-                        // 2️⃣ Find corresponding employee ID
-                        string queryEmployee = "SELECT eId FROM Employees WHERE eName=@name";
-                        int employeeId;
-                        using (SqlCommand cmdEmp = new SqlCommand(queryEmployee, conn, transaction))
-                        {
-                            cmdEmp.Parameters.AddWithValue("@name", name);
-                            object result = cmdEmp.ExecuteScalar();
-                            if (result == null)
-                            {
-                                MessageBox.Show("No employee found with this name. Cannot map account.",
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                transaction.Rollback();
-                                return;
-                            }
-                            employeeId = Convert.ToInt32(result);
-                        }
-
-                        // 3️⃣ Insert mapping record
-                        string queryMap = "INSERT INTO CashierAdminMapping (eId, adminID) VALUES (@eId, @adminID)";
-                        using (SqlCommand cmdMap = new SqlCommand(queryMap, conn, transaction))
-                        {
-                            cmdMap.Parameters.AddWithValue("@eId", employeeId);
-                            cmdMap.Parameters.AddWithValue("@adminID", newAdminId);
-                            cmdMap.ExecuteNonQuery();
-                        }
-
-                        // 4️⃣ Update employee status
-                        string queryUpdate = "UPDATE Employees SET eStatus=@eStatus WHERE eId=@eId";
-                        using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction))
-                        {
-                            cmdUpdate.Parameters.AddWithValue("@eStatus", "create");
-                            cmdUpdate.Parameters.AddWithValue("@eId", employeeId);
-                            cmdUpdate.ExecuteNonQuery();
-                        }
-
-                        // 5️⃣ Commit all changes
-                        transaction.Commit();
-                        MessageBox.Show("New admin account created and linked successfully!",
-                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception exTrans)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show("Failed to create admin: " + exTrans.Message,
-                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                employee.saveAccount();
+                
                 btnRefresh_Click(sender, e);
             }
             catch (SqlException se)
