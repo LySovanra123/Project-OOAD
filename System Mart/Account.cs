@@ -212,33 +212,35 @@ namespace System_Mart
         {
             try
             {
+                // Ignore header clicks
                 if (e.RowIndex < 0) return;
 
                 DataGridViewRow row = dgvAccount.Rows[e.RowIndex];
 
-                if (dgvAccount.Columns.Contains("adminName"))
-                    txtName.Text = row.Cells["adminName"].Value?.ToString() ?? "";
+                // Helper method to safely get cell value
+                string GetCellValue(string columnName) =>
+                    dgvAccount.Columns.Contains(columnName)
+                        ? row.Cells[columnName].Value?.ToString() ?? ""
+                        : "";
 
-                if (dgvAccount.Columns.Contains("adminPassword"))
-                {
-                    txtPassword.Text = row.Cells["adminPassword"].Value?.ToString() ?? "";
-                    txtConfirmPassword.Text = txtPassword.Text;
-                }
+                // Fill admin info
+                txtName.Text = GetCellValue("adminName");
+                txtPassword.Text = GetCellValue("adminPassword");
+                txtConfirmPassword.Text = txtPassword.Text; // Mirror password
+                txtPosition.Text = GetCellValue("adminPosition");
 
-                if (dgvAccount.Columns.Contains("adminPosition"))
-                    txtPosition.Text = row.Cells["adminPosition"].Value?.ToString() ?? "";
-                DisplayButtun();
+                DisplayButtun(); // Update buttons
 
-                if (string.IsNullOrEmpty(txtName.Text) && dgvAccount.Columns.Contains("eName"))
-                    txtName.Text = row.Cells["eName"].Value?.ToString() ?? "";
+                // Fallback to employee info if admin info is empty
+                if (string.IsNullOrEmpty(txtName.Text))
+                    txtName.Text = GetCellValue("eName");
 
-                if (string.IsNullOrEmpty(txtPosition.Text) && dgvAccount.Columns.Contains("ePosition"))
-                    txtPosition.Text = row.Cells["ePosition"].Value?.ToString() ?? "";
-
+                if (string.IsNullOrEmpty(txtPosition.Text))
+                    txtPosition.Text = GetCellValue("ePosition");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show($"Error: {ex.Message}", "Load Row Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -360,7 +362,6 @@ namespace System_Mart
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@name", name);
-                    conn.Open();
                     Object result = cmd.ExecuteScalar();
                     if (result != null)
                     {

@@ -7,19 +7,19 @@
       "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\pattern\\account_composite.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\pattern\\account_composite.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\pattern\\account_composite.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\model\\account_model.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\model\\account_model.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\model\\account_model.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\service\\employee_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\service\\employee_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\service\\employee_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -42,8 +42,7 @@
               "RelativeToolTip": "System Mart\\Service\\Employee_Service.cs",
               "ViewState": "AgIAAPwAAAAAAAAAAAAuwFEBAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T09:32:53.168Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-23T09:32:53.168Z"
             },
             {
               "$type": "Document",
@@ -55,8 +54,7 @@
               "RelativeToolTip": "System Mart\\Model\\Account_Model.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T09:14:19.458Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-23T09:14:19.458Z"
             },
             {
               "$type": "Document",
@@ -68,8 +66,7 @@
               "RelativeToolTip": "System Mart\\Pattern\\Account_Composite.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAgwDkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T07:50:28.733Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-23T07:50:28.733Z"
             },
             {
               "$type": "Document",
@@ -79,7 +76,7 @@
               "RelativeDocumentMoniker": "System Mart\\Account.cs",
               "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Account.cs",
               "RelativeToolTip": "System Mart\\Account.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAqwCQAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAAGoBAAAAAAAAAAArwHcBAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-23T07:45:48.553Z",
               "EditorCaption": ""
@@ -93,8 +90,7 @@
               "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Account.cs [Design]",
               "RelativeToolTip": "System Mart\\Account.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T07:46:04.701Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-02-23T07:46:04.701Z"
             }
           ]
         }
