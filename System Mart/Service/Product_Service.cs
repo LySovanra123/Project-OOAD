@@ -19,19 +19,40 @@ namespace System_Mart.Service
         {
             SqlConnection conn = DataBaseConnection.Instance.GetConnection();
 
-            String query = "INSERT INTO Products(pName,pImage,pPrice,importDate,pStatus) " +
-                    "VALUES(@name,@image,@price,@importDate,@status)";
+            string query = @"INSERT INTO Products
+                            (pName, pImage, pPrice, importDate, pStatus)
+                            VALUES
+                            (@name, @image, @price, @importDate, @status)";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@name", product_Model.Pro_name);
-                cmd.Parameters.Add("@image", SqlDbType.VarBinary, product_Model.Pro_imageData.Length).Value = product_Model.Pro_imageData;
                 cmd.Parameters.AddWithValue("@price", product_Model.Pro_price);
                 cmd.Parameters.AddWithValue("@importDate", product_Model.Pro_importDate);
                 cmd.Parameters.AddWithValue("@status", "Available");
-                cmd.ExecuteNonQuery();
 
+                // Safely handle null image
+                if (product_Model.Pro_imageData != null)
+                    cmd.Parameters.Add("@image", SqlDbType.VarBinary)
+                       .Value = product_Model.Pro_imageData;
+                else
+                    cmd.Parameters.Add("@image", SqlDbType.VarBinary)
+                       .Value = DBNull.Value;
+
+                cmd.ExecuteNonQuery();
             }
+        }
+
+        //==============Clone================
+        public void duplicateProduct(Product_Model original)
+        {
+            Product_Model clone = original.Clone();
+
+            clone.Pro_id = 0; // new ID
+            clone.Pro_name += " - Copy";
+            clone.Pro_importDate = DateTime.Now;
+
+            addProduct(clone);
         }
 
         public bool UpdateProduct(Product_Model product_Model) 
@@ -97,6 +118,7 @@ namespace System_Mart.Service
                     barCode, 
                     pName, 
                     pPrice, 
+                    pImage,
                     importDate, 
                     pStatus,
                     COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
@@ -118,7 +140,8 @@ namespace System_Mart.Service
                     barCode, 
                     pName, 
                     pPrice, 
-                    importDate, 
+                    importDate,
+                    pImage,
                     pStatus,
                     COUNT(*) OVER (PARTITION BY pName) AS NumberOfProduct
                  FROM Products WHERE pStatus = 'Saled'";

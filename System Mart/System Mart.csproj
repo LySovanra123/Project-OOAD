@@ -81,6 +81,7 @@
     <Compile Include="Model\Account_Model.cs" />
     <Compile Include="Model\Employee_Model.cs" />
     <Compile Include="Model\Product_Model.cs" />
+    <Compile Include="Pattern\Propotype.cs" />
     <Compile Include="Payment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +103,7 @@
       <DependentUpon>ResetPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Pattern\Account_Composite.cs" />
+    <Compile Include="Service\Account_Service.cs" />
     <Compile Include="Service\Employee_Service.cs" />
     <Compile Include="Service\Product_Service.cs" />
     <Compile Include="Session.cs" />
@@ -298,6 +300,14 @@
   <ItemGroup>
     <None Include="Resources\logout %283%29.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\discount.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\discount %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\replication %283%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

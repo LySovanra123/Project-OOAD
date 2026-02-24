@@ -143,6 +143,26 @@ namespace System_Mart.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap discount {
+            get {
+                object obj = ResourceManager.GetObject("discount", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap discount__1_ {
+            get {
+                object obj = ResourceManager.GetObject("discount (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edit__1_ {
             get {
                 object obj = ResourceManager.GetObject("edit (1)", resourceCulture);
@@ -306,6 +326,16 @@ namespace System_Mart.Properties {
         internal static System.Drawing.Bitmap refresh__2_ {
             get {
                 object obj = ResourceManager.GetObject("refresh (2)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap replication__3_ {
+            get {
+                object obj = ResourceManager.GetObject("replication (3)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

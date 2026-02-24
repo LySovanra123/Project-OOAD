@@ -16,7 +16,6 @@ namespace System_Mart
         private byte[] imageData = null;
 
         private Product_Service service = new Product_Service();
-
         public Product()
         {
             InitializeComponent();
@@ -155,6 +154,8 @@ namespace System_Mart
                 if (e.RowIndex >= 0)
                 {
                     DataGridViewRow row = dgvProduct.Rows[e.RowIndex];
+
+                    // Fill textboxes
                     txtProductName.Text = row.Cells["pName"].Value.ToString();
                     txtBarCode.Text = row.Cells["barCode"].Value.ToString();
                     txtPrice.Text = row.Cells["pPrice"].Value.ToString();
@@ -331,6 +332,39 @@ namespace System_Mart
         {
             btnLogout.Show();
             btnBack.Hide();
+        }
+
+        private void btnDuplicate_Click(object sender, EventArgs e)
+        {
+            Product_Model selectedProduct = new Product_Model()
+            {
+                Pro_name = txtProductName.Text,
+                Pro_imageData = imageData,
+                Pro_importDate = DateTime.Now,
+                Pro_price = double.TryParse(txtPrice.Text, out double price) ? price : 0
+            };
+
+            if (selectedProduct == null)
+            {
+                MessageBox.Show("Please select a product to duplicate.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                service.duplicateProduct(selectedProduct);
+
+                pnlMessage.Show();
+                lblMessageProduct.Text = "Product duplicated successfully!";
+            }
+            catch (SqlException se)
+            {
+                MessageBox.Show("Database error: " + se.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

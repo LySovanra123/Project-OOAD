@@ -46,6 +46,7 @@
             this.dgvProduct = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
+            this.btnDuplicate = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -230,6 +231,21 @@
             this.label9.TabIndex = 0;
             this.label9.Text = "Product";
             // 
+            // btnDuplicate
+            // 
+            this.btnDuplicate.BackColor = System.Drawing.SystemColors.Control;
+            this.btnDuplicate.Image = global::System_Mart.Properties.Resources.replication__3_;
+            this.btnDuplicate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDuplicate.Location = new System.Drawing.Point(852, 176);
+            this.btnDuplicate.Name = "btnDuplicate";
+            this.btnDuplicate.Size = new System.Drawing.Size(161, 49);
+            this.btnDuplicate.TabIndex = 28;
+            this.btnDuplicate.Text = "Duplicate Product";
+            this.btnDuplicate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDuplicate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnDuplicate.UseVisualStyleBackColor = false;
+            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
+            // 
             // btnLogout
             // 
             this.btnLogout.BackColor = System.Drawing.SystemColors.Control;
@@ -307,7 +323,7 @@
             this.btnBack.BackColor = System.Drawing.SystemColors.Control;
             this.btnBack.Image = global::System_Mart.Properties.Resources.left_arrow__1_;
             this.btnBack.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnBack.Location = new System.Drawing.Point(642, 0);
+            this.btnBack.Location = new System.Drawing.Point(643, 0);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(98, 49);
             this.btnBack.TabIndex = 6;
@@ -412,6 +428,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1033, 631);
+            this.Controls.Add(this.btnDuplicate);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.panel2);
@@ -485,5 +502,6 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Label lblMessageProduct;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Button btnDuplicate;
     }
 }

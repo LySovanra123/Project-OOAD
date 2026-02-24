@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System_Mart.Model;
 using System_Mart.Service;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace System_Mart
 {
@@ -17,6 +18,7 @@ namespace System_Mart
     {
 
         private Manager manager;
+        private Account_Service service;
         public Account()
         {
             InitializeComponent();
@@ -105,23 +107,15 @@ namespace System_Mart
 
             try
             {
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+                dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-                String query = "SELECT * FROM AccountAdmins";
-
-                using (SqlDataAdapter sda = new SqlDataAdapter(query, conn))
+                // Run on UI thread to avoid race condition
+                this.BeginInvoke(new MethodInvoker(() =>
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    dgvAccount.DataSource = service.getAllAccount();
+                    dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }));
 
-                    // Run on UI thread to avoid race condition
-                    this.BeginInvoke(new MethodInvoker(() =>
-                    {
-                        dgvAccount.DataSource = dt;
-                        dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                    }));
-                }
             }
             catch (Exception ex)
             {
@@ -151,28 +145,15 @@ namespace System_Mart
             try
             {
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-               
-                String name = txtName.Text.Trim();
-
-                String query = "SELECT * FROM AccountAdmins WHERE adminName=@name";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                if (service.searchAccount(txtSearchName.Text).Rows.Count > 0)
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
-
-                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    if (dt.Rows.Count > 0)
-                    {
-                        dgvAccount.DataSource = dt;
-                    }
-                    else
-                    {
-                        MessageBox.Show("No account found with that name.", "Not Found",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        dgvAccount.DataSource = null;
-                    }
+                    dgvAccount.DataSource = service.searchAccount(txtSearchName.Text);
+                }
+                else
+                {
+                    MessageBox.Show("No account found with that name.", "Not Found",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    dgvAccount.DataSource = null;
                 }
             }
             catch (SqlException se)
@@ -274,30 +255,14 @@ namespace System_Mart
         {
             try
             {
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+                dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-                String query = "SELECT eId,eName,ePosition FROM Employees WHERE (ePosition=@positionC OR ePosition=@positionM OR ePosition=@positionS) AND eStatus=@status";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                // Assign DataSource safely on UI thread
+                this.BeginInvoke(new MethodInvoker(() =>
                 {
-                    cmd.Parameters.AddWithValue("@positionC", "Cashier");
-                    cmd.Parameters.AddWithValue("@positionM", "Manager");
-                    cmd.Parameters.AddWithValue("@positionS", "Stocker");
-                    cmd.Parameters.AddWithValue("@status", "Not yet");
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-
-                        // Assign DataSource safely on UI thread
-                        this.BeginInvoke(new MethodInvoker(() =>
-                        {
-                            dgvAccount.DataSource = dt;
-                            dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                        }));
-                    }
-                }
+                    dgvAccount.DataSource = service.getAllEmployeeCashierANDStock();
+                    dgvAccount.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }));
             }
             catch (Exception ex)
             {
@@ -319,22 +284,14 @@ namespace System_Mart
                 String position = txtPosition.Text.Trim();
                 String password = txtPassword.Text.Trim();
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-
-                String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                Account_Model account_Model = new Account_Model()
                 {
-                    cmd.Parameters.AddWithValue("@name", Name);
-                    cmd.Parameters.AddWithValue("@status", "disable");
-                    cmd.Parameters.AddWithValue("@password", password);
-                    cmd.Parameters.AddWithValue("@position", position);
+                    Name = Name,
+                    Position = position,
+                    Password = password
+                };
 
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-
-                }
+                service.disableAccount(account_Model);
 
                 btnRefresh_Click(sender, e);
 
@@ -355,29 +312,19 @@ namespace System_Mart
             {
                 string name = txtName.Text.Trim();
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+                string status = service.displayButton(name);
 
-                string query = "SELECT adminStatus FROM AccountAdmins WHERE adminName=@name";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                if (status.Equals("enable"))
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
-                    Object result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        string status = result.ToString().Trim();
-                        if (status.Equals("enable"))
-                        {
-                            btnEnable.Enabled = false;
-                            btnDisable.Enabled = true;
-                        }
-                        else
-                        {
-                            btnEnable.Enabled = true;
-                            btnDisable.Enabled = false;
-                        }
-                    }
+                    btnEnable.Enabled = false;
+                    btnDisable.Enabled = true;
                 }
+                else
+                {
+                    btnEnable.Enabled = true;
+                    btnDisable.Enabled = false;
+                }
+
             }
             catch (Exception ex)
             {
@@ -399,21 +346,13 @@ namespace System_Mart
                 String position = txtPosition.Text.Trim();
                 String password = txtPassword.Text.Trim();
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                Account_Model model = new Account_Model()
                 {
-                    cmd.Parameters.AddWithValue("@name", Name);
-                    cmd.Parameters.AddWithValue("@status", "enable");
-                    cmd.Parameters.AddWithValue("@password", password);
-                    cmd.Parameters.AddWithValue("@position", position);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-
-                }
+                    Name = Name,
+                    Position = position,
+                    Password = password
+                };
+                service.enableAccount(model);
                 btnRefresh_Click(sender, e);
 
             }
