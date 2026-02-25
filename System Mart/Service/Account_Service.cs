@@ -9,11 +9,15 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.Office.Interop.Excel;
 using System_Mart.Model;
+using System_Mart.Pattern;
 
 namespace System_Mart.Service
 {
     public class Account_Service
     {
+        private IPosition manager = new ManagerPosition();
+        private IPosition cashier = new CashierPosition();
+        private IPosition stocker = new StockerPosition();
         public System.Data.DataTable getAllAccount()
         {
             SqlConnection conn = DataBaseConnection.Instance.GetConnection();
@@ -66,20 +70,20 @@ namespace System_Mart.Service
 
         public void disableAccount(Account_Model account_Model)
         {
-            SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-            String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            if (account_Model.Position.ToLower() == "manager")
             {
-                cmd.Parameters.AddWithValue("@name", account_Model.Name);
-                cmd.Parameters.AddWithValue("@status", "disable");
-                cmd.Parameters.AddWithValue("@password", account_Model.Password);
-                cmd.Parameters.AddWithValue("@position", account_Model.Position);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-
+                AdminPosition enableManager = new AdminPosition(manager);
+                enableManager.DisableAccount(account_Model);
+            }
+            else if (account_Model.Position.ToLower() == "stocker")
+            {
+                AdminPosition enableStocker = new AdminPosition(stocker);
+                enableStocker.DisableAccount(account_Model);
+            }
+            else
+            {
+                AdminPosition enableCashier = new AdminPosition(cashier);
+                enableCashier.DisableAccount(account_Model);
             }
         }
 
@@ -99,25 +103,91 @@ namespace System_Mart.Service
                     return status;
                 }
             }
-            return null;
+            return "disable";
         }
 
         public void enableAccount(Account_Model account_Model)
         {
+
+            if (account_Model.Position.ToLower() == "manager")
+            {
+                AdminPosition enableManager = new AdminPosition(manager);
+                enableManager.EnableAccount(account_Model);
+            }
+            else if (account_Model.Position.ToLower() == "stocker")
+            {
+                AdminPosition enableStocker = new AdminPosition(stocker);
+                enableStocker.EnableAccount(account_Model);
+            }
+            else
+            {
+                AdminPosition enableCashier = new AdminPosition(cashier);
+                enableCashier.EnableAccount(account_Model);
+            }
+        }
+
+        //==============login================
+        public bool Login(Account_Model account_Model)
+        {
             SqlConnection conn = DataBaseConnection.Instance.GetConnection();
 
-            String query = "UPDATE AccountAdmins SET adminStatus=@status WHERE adminName=@name AND adminPassword=@password AND adminPosition=@position";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            string Query = "SELECT adminPosition FROM AccountAdmins " +
+                           "WHERE adminName = @name AND adminPassword = @password AND adminStatus=@status";
+
+            using (SqlCommand cmd = new SqlCommand(Query, conn))
             {
                 cmd.Parameters.AddWithValue("@name", account_Model.Name);
-                cmd.Parameters.AddWithValue("@status", "enable");
                 cmd.Parameters.AddWithValue("@password", account_Model.Password);
-                cmd.Parameters.AddWithValue("@position", account_Model.Position);
+                cmd.Parameters.AddWithValue("@status", "enable");
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                Object result = cmd.ExecuteScalar();
 
+                if (result != null)
+                {
+                    String position = result.ToString().Trim();
+
+                    if (position.Equals("Manager"))
+                    {
+                        EmployeeAccount employeeManager = new EmployeeAccount(manager);
+                        employeeManager.employeeLoginAccount();
+                    }
+                    else if (position.Equals("Stocker"))
+                    {
+                        EmployeeAccount employeeStocker = new EmployeeAccount(stocker);
+                        employeeStocker.employeeLoginAccount();
+                    }
+                    else
+                    {
+                        EmployeeAccount employeeCashier = new EmployeeAccount(cashier);
+                        employeeCashier.employeeLoginAccount();
+                    }
+
+                    return true;
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        //=======================Logout===========================
+        public void LogoutAccount(string position)
+        {
+            if (position == "manager")
+            {
+                EmployeeAccount employeeManager = new EmployeeAccount(manager);
+                employeeManager.employeeLogout();
+            }
+            else if (position == "stocker")
+            {
+                EmployeeAccount employeeStocker = new EmployeeAccount(stocker);
+                employeeStocker.employeeLogout();
+            }
+            else
+            {
+                EmployeeAccount employeeCashier = new EmployeeAccount(cashier);
+                employeeCashier.employeeLogout();
             }
         }
     }

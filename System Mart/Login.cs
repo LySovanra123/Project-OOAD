@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System_Mart.Model;
+using System_Mart.Service;
 
 namespace System_Mart
 {
@@ -18,6 +13,8 @@ namespace System_Mart
         {
             InitializeComponent();
         }
+
+        private Account_Service service = new Account_Service();
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -41,47 +38,22 @@ namespace System_Mart
                 Session.SessionName = name;
                 Session.SessionPassword = password;
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
-
-                string Query = "SELECT adminPosition FROM AccountAdmins " +
-                               "WHERE adminName = @name AND adminPassword = @password AND adminStatus=@status";
-
-                using (SqlCommand cmd = new SqlCommand(Query, conn))
+                Account_Model account_Model = new Account_Model()
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.AddWithValue("@password", password);
-                    cmd.Parameters.AddWithValue("@status", "enable");
+                    Name = name,
+                    Password = password,
+                };
 
-                    Object result = cmd.ExecuteScalar();
+                bool result = service.Login(account_Model);
 
-                    if (result != null)
-                    {
-                        String position = result.ToString().Trim();
-
-                        if (position.Equals("Manager"))
-                        {
-                            MainAdmin mainAdmin = new MainAdmin();
-                            mainAdmin.Show();
-                        }
-                        else if (position.Equals("Stocker"))
-                        {
-                            Product product = new Product();
-                            product.StockerShowLogout();
-                            product.Show();
-                        }
-                        else
-                        {
-                            MainUser mainUser = new MainUser();
-                            mainUser.Show();
-                        }
-
-                        this.Hide();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid username or password.",
+                if (result)
+                {
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid username or password.",
                                         "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
                 }
             }
             catch (SqlException se)

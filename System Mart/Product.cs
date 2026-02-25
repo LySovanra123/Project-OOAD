@@ -16,6 +16,7 @@ namespace System_Mart
         private byte[] imageData = null;
 
         private Product_Service service = new Product_Service();
+        private Account_Service accountService = new Account_Service();
         public Product()
         {
             InitializeComponent();
@@ -313,15 +314,11 @@ namespace System_Mart
 
         private void button1_Click(object sender, EventArgs e)
         {
+            accountService.LogoutAccount("stocker");
             this.Close();
-            Login login = Application.OpenForms.OfType<Login>().FirstOrDefault();
-            if (login != null)
-            {
-                login.clearForm();
-                login.Show();
-            }
+
         }
-        
+
         public void ManagerShowBack()
         {
             btnLogout.Hide();

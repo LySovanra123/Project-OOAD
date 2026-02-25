@@ -49,7 +49,6 @@ namespace System_Mart.Service
             Product_Model clone = original.Clone();
 
             clone.Pro_id = 0; // new ID
-            clone.Pro_name += " - Copy";
             clone.Pro_importDate = DateTime.Now;
 
             addProduct(clone);
@@ -181,7 +180,6 @@ namespace System_Mart.Service
                         }
                     }
 
-                    transaction.Commit();
                 }
                 catch
                 {

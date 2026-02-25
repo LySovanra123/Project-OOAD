@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System_Mart.Model;
 using System_Mart.Service;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace System_Mart
 {
     public partial class Account : Form
     {
 
-        private Manager manager;
-        private Account_Service service;
+        private Manager manager = new Manager();
+        private Account_Service service = new Account_Service();
         public Account()
         {
             InitializeComponent();
@@ -80,7 +73,7 @@ namespace System_Mart
                 };
 
                 IEmployee employee;
-                if(account.Position.ToLower() == "manager")                
+                if (account.Position.ToLower() == "manager")
                     employee = new Manager(account);
                 else
                     employee = new Cashier(account);
@@ -88,7 +81,7 @@ namespace System_Mart
                 manager.Add(employee);
 
                 employee.saveAccount();
-                
+
                 btnRefresh_Click(sender, e);
             }
             catch (SqlException se)
@@ -137,9 +130,9 @@ namespace System_Mart
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(String.IsNullOrEmpty(txtSearchName.Text))
+            if (String.IsNullOrEmpty(txtSearchName.Text))
             {
-                MessageBox.Show("Please enter name.", "Warning",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter name.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             try
@@ -181,12 +174,8 @@ namespace System_Mart
         private void btnLogout_Click(object sender, EventArgs e)
         {
             this.Close();
-            Login login = Application.OpenForms.OfType<Login>().FirstOrDefault();
-            if (login != null)
-            {
-                login.clearForm();
-                login.Show();
-            }
+            service.LogoutAccount("manager");
+            
         }
 
         private void SelectData_Click(object sender, DataGridViewCellEventArgs e)

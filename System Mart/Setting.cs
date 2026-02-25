@@ -8,11 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System_Mart.Service;
 
 namespace System_Mart
 {
     public partial class Setting : Form
     {
+
+        private Account_Service service = new Account_Service();
         public Setting()
         {
             InitializeComponent();
@@ -82,18 +85,8 @@ namespace System_Mart
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            Login login = Application.OpenForms.OfType<Login>().FirstOrDefault();
-            if (login != null)
-            {
-                login.clearForm();
-                login.Show();
-            }
-            MainUser mainUser = Application.OpenForms.OfType<MainUser>().FirstOrDefault();
-            if (mainUser != null)
-            {
-                mainUser.resetForm();
-                mainUser.Close();
-            }
+
+            service.LogoutAccount("cashier");
             this.Close();
 
         }

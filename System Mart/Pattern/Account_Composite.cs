@@ -37,6 +37,10 @@ namespace System_Mart.Service
         private Employee_Service service = new Employee_Service();
         private List<IEmployee> employees = new List<IEmployee>();
 
+        public Manager()
+        {
+        }
+
         public Manager(Account_Model account)
         {
             this.account = account;
