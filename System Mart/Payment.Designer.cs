@@ -47,7 +47,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(352, 346);
+            this.panel1.Size = new System.Drawing.Size(408, 359);
             this.panel1.TabIndex = 0;
             // 
             // dgvPayment
@@ -60,7 +60,7 @@
             this.dgvPayment.Name = "dgvPayment";
             this.dgvPayment.RowHeadersWidth = 51;
             this.dgvPayment.RowTemplate.Height = 24;
-            this.dgvPayment.Size = new System.Drawing.Size(352, 286);
+            this.dgvPayment.Size = new System.Drawing.Size(408, 299);
             this.dgvPayment.TabIndex = 1;
             // 
             // panel2
@@ -70,9 +70,9 @@
             this.panel2.Controls.Add(this.btnPay);
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 286);
+            this.panel2.Location = new System.Drawing.Point(0, 299);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(352, 60);
+            this.panel2.Size = new System.Drawing.Size(408, 60);
             this.panel2.TabIndex = 0;
             // 
             // btnCancel
@@ -80,7 +80,7 @@
             this.btnCancel.BackColor = System.Drawing.Color.Red;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(234, 0);
+            this.btnCancel.Location = new System.Drawing.Point(290, 0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(118, 60);
             this.btnCancel.TabIndex = 2;
@@ -107,14 +107,14 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(352, 60);
+            this.panel3.Size = new System.Drawing.Size(408, 60);
             this.panel3.TabIndex = 0;
             // 
             // Payment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(352, 346);
+            this.ClientSize = new System.Drawing.Size(408, 359);
             this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.Name = "Payment";

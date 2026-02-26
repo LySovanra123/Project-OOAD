@@ -49,6 +49,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.picbProduct = new System.Windows.Forms.PictureBox();
+            this.cbbBank = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlMessage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductOrder)).BeginInit();
@@ -59,6 +61,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.cbbBank);
             this.panel1.Controls.Add(this.pnlMessage);
             this.panel1.Controls.Add(this.lblName);
             this.panel1.Controls.Add(this.label2);
@@ -278,6 +282,29 @@
             this.picbProduct.TabStop = false;
             this.picbProduct.Click += new System.EventHandler(this.picbProduct_Click);
             // 
+            // cbbBank
+            // 
+            this.cbbBank.FormattingEnabled = true;
+            this.cbbBank.Items.AddRange(new object[] {
+            "ABA Bank",
+            "ACLEDA Bank"});
+            this.cbbBank.Location = new System.Drawing.Point(17, 220);
+            this.cbbBank.Name = "cbbBank";
+            this.cbbBank.Size = new System.Drawing.Size(164, 24);
+            this.cbbBank.TabIndex = 10;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Red;
+            this.label5.Location = new System.Drawing.Point(14, 192);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(128, 25);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Select Bank :";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
+            // 
             // MainUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -334,5 +361,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel pnlMessage;
         private System.Windows.Forms.Label lblMessage;
+        private System.Windows.Forms.ComboBox cbbBank;
+        private System.Windows.Forms.Label label5;
     }
 }

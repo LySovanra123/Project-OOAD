@@ -3,36 +3,24 @@
   "WorkspaceRootPath": "D:\\Github\\GitHub\\C#\\Project-OOAD\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\service\\product_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\service\\product_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\pattern\\adapter_pattern.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\pattern\\adapter_pattern.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|d:\\github\\github\\c#\\project-ooad\\system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\model\\account_model.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\model\\account_model.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\mainuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\mainuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\service\\account_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\service\\account_service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\pattern\\bridge_pattern.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\pattern\\bridge_pattern.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|D:\\Github\\GitHub\\C#\\Project-OOAD\\system mart\\mainuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5E8B0B3D-0488-4E7F-A0AD-BA25AB51EFC9}|System Mart\\System Mart.csproj|solutionrelative:system mart\\mainuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,103 +30,66 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Product_Service.cs",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Service\\Product_Service.cs",
-              "RelativeDocumentMoniker": "System Mart\\Service\\Product_Service.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Service\\Product_Service.cs*",
-              "RelativeToolTip": "System Mart\\Service\\Product_Service.cs*",
-              "ViewState": "AgIAAJwAAAAAAAAAAIA2wLUAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "MainUser.cs",
+              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\MainUser.cs",
+              "RelativeDocumentMoniker": "System Mart\\MainUser.cs",
+              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\MainUser.cs",
+              "RelativeToolTip": "System Mart\\MainUser.cs",
+              "ViewState": "AgIAAPgAAAAAAAAAAAAAABMBAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T17:59:55.728Z",
+              "WhenOpened": "2026-02-26T19:51:13.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainUser.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\MainUser.cs",
+              "RelativeDocumentMoniker": "System Mart\\MainUser.cs",
+              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\MainUser.cs [Design]",
+              "RelativeToolTip": "System Mart\\MainUser.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T19:51:11.398Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Adapter_Pattern.cs",
+              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Pattern\\Adapter_Pattern.cs",
+              "RelativeDocumentMoniker": "System Mart\\Pattern\\Adapter_Pattern.cs",
+              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Pattern\\Adapter_Pattern.cs",
+              "RelativeToolTip": "System Mart\\Pattern\\Adapter_Pattern.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAcwFMAAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T19:48:12.276Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Account.cs",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Account.cs",
-              "RelativeDocumentMoniker": "System Mart\\Account.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Account.cs",
-              "RelativeToolTip": "System Mart\\Account.cs",
-              "ViewState": "AgIAAAsBAAAAAAAAAAAuwDoBAAAUAAAAAAAAAA==",
+              "Title": "Payment.cs",
+              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Payment.cs",
+              "RelativeDocumentMoniker": "System Mart\\Payment.cs",
+              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Payment.cs",
+              "RelativeToolTip": "System Mart\\Payment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T17:32:11.719Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-26T19:45:58.955Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Account.cs [Design]",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Account.cs",
-              "RelativeDocumentMoniker": "System Mart\\Account.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Account.cs [Design]",
-              "RelativeToolTip": "System Mart\\Account.cs [Design]",
+              "Title": "Payment.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Payment.cs",
+              "RelativeDocumentMoniker": "System Mart\\Payment.cs",
+              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Payment.cs [Design]",
+              "RelativeToolTip": "System Mart\\Payment.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T17:32:03.754Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Account_Model.cs",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Model\\Account_Model.cs",
-              "RelativeDocumentMoniker": "System Mart\\Model\\Account_Model.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Model\\Account_Model.cs",
-              "RelativeToolTip": "System Mart\\Model\\Account_Model.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T16:49:35.12Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Account_Service.cs",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Service\\Account_Service.cs",
-              "RelativeDocumentMoniker": "System Mart\\Service\\Account_Service.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Service\\Account_Service.cs",
-              "RelativeToolTip": "System Mart\\Service\\Account_Service.cs",
-              "ViewState": "AgIAAEYAAAAAAAAAAAA5wGkAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T16:49:31.925Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Login.cs",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Login.cs",
-              "RelativeDocumentMoniker": "System Mart\\Login.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Login.cs",
-              "RelativeToolTip": "System Mart\\Login.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAArwEUAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T16:47:58.095Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Login.cs [Design]",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Login.cs",
-              "RelativeDocumentMoniker": "System Mart\\Login.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Login.cs [Design]",
-              "RelativeToolTip": "System Mart\\Login.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T16:47:54.76Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Bridge_Pattern.cs",
-              "DocumentMoniker": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Pattern\\Bridge_Pattern.cs",
-              "RelativeDocumentMoniker": "System Mart\\Pattern\\Bridge_Pattern.cs",
-              "ToolTip": "D:\\Github\\GitHub\\C#\\Project-OOAD\\System Mart\\Pattern\\Bridge_Pattern.cs",
-              "RelativeToolTip": "System Mart\\Pattern\\Bridge_Pattern.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAqwBYAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T16:46:50.485Z"
+              "WhenOpened": "2026-02-26T19:45:45.765Z"
             }
           ]
         }

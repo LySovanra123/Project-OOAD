@@ -272,7 +272,15 @@ namespace System_Mart
                         }
                     }
                 }
-                Payment payment = new Payment(productSummary,barcodeList);
+
+                string selectBank = cbbBank.Text;
+
+                if(selectBank == null)
+                {
+                    selectBank = "ABA Bank";
+                }
+
+                Payment payment = new Payment(productSummary,barcodeList, selectBank);
                 payment.Show();
             }
             catch (Exception ex)
@@ -301,6 +309,11 @@ namespace System_Mart
         }
 
         private void picbProduct_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
         {
 
         }

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pattern\Adapter_Pattern.cs" />
     <Compile Include="Pattern\Bridge_Pattern.cs" />
     <Compile Include="Pattern\configDB_Singleton.cs" />
     <Compile Include="Employee.cs">

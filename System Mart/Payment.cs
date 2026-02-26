@@ -8,22 +8,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System_Mart.Pattern;
 
 namespace System_Mart
 {
     public partial class Payment : Form
     {
         List<int> barcodeList = new List<int>();
-        public Payment(Dictionary<string, (int count , decimal totalPrice)> productSummary, List<int> barcodeList)
+        private IPaymentMethod paymentMethod;
+        string bankType;
+        public Payment(Dictionary<string, (int count , decimal totalPrice)> productSummary, List<int> barcodeList, string BankType)
         {
             InitializeComponent();
 
             this.barcodeList = barcodeList;
+            bankType = BankType;
 
             dgvPayment.Columns.Clear();
             dgvPayment.Columns.Add("ProductName", "Product Name");
             dgvPayment.Columns.Add("Count", "Count");
             dgvPayment.Columns.Add("TotalPrice", "Total Price");
+            dgvPayment.Columns.Add("Bank", "Bank");
 
             dgvPayment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvPayment.Columns["TotalPrice"].DefaultCellStyle.Format = "N2";
@@ -31,10 +36,10 @@ namespace System_Mart
             decimal grandTotal = 0;
             foreach (var item in productSummary)
             {
-                dgvPayment.Rows.Add(item.Key, item.Value.count, item.Value.totalPrice);
+                dgvPayment.Rows.Add(item.Key, item.Value.count, item.Value.totalPrice,"");
                 grandTotal += item.Value.totalPrice;
             }
-            dgvPayment.Rows.Add("Grand Total", "", grandTotal);
+            dgvPayment.Rows.Add("Grand Total", "", grandTotal,BankType);
             dgvPayment.Rows[dgvPayment.Rows.Count - 1].DefaultCellStyle.Font =
                 new Font(dgvPayment.Font, FontStyle.Bold);
             dgvPayment.Rows[dgvPayment.Rows.Count - 1].DefaultCellStyle.BackColor = Color.LightYellow;
@@ -56,51 +61,19 @@ namespace System_Mart
             {
                 int eId = Session.SessioneId;
 
-                SqlConnection conn = DataBaseConnection.Instance.GetConnection();
+                ABABankAPI apiABA = new ABABankAPI();
+                ACLEDABankAPI apiACLEDA = new ACLEDABankAPI();
 
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                if(bankType.Equals("ABA Bank")){
+                    paymentMethod = new ABAAdapter(apiABA);
+                }
+                else
                 {
-                    try
-                    {
-                        // Update product status
-                        string queryUpdate = "UPDATE Products SET pStatus = @newStatus WHERE pStatus = @oldStatus";
-                        using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction))
-                        {
-                            cmdUpdate.Parameters.AddWithValue("@newStatus", "Saled");
-                            cmdUpdate.Parameters.AddWithValue("@oldStatus", "SaleShortList");
-                            cmdUpdate.ExecuteNonQuery();
-                        }
-
-                        // Insert into CashierProducts
-                        string queryCashierProduct = "INSERT INTO CashierProducts(eId, barCode, assignDate) " +
-                                                     "VALUES(@eId, @barCode, @assignDate)";
-                        using (SqlCommand cmdCashierProduct = new SqlCommand(queryCashierProduct, conn, transaction))
-                        {
-                            cmdCashierProduct.Parameters.Add("@eId", SqlDbType.Int);
-                            cmdCashierProduct.Parameters.Add("@barCode", SqlDbType.Int);
-                            cmdCashierProduct.Parameters.Add("@assignDate", SqlDbType.DateTime);
-
-                            foreach (var barcode in barcodeList)
-                            {
-                                cmdCashierProduct.Parameters["@eId"].Value = eId;
-                                cmdCashierProduct.Parameters["@barCode"].Value = barcode;
-                                cmdCashierProduct.Parameters["@assignDate"].Value = DateTime.Now;
-
-                                cmdCashierProduct.ExecuteNonQuery();
-                            }
-                        }
-
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    paymentMethod = new ACLEDAAdapter(apiACLEDA);
                 }
 
-                conn.Close();
-
+                paymentMethod.ProccessPayment(eId,barcodeList);
+                
                 // Clear the list safely
                 barcodeList.Clear();
             }
